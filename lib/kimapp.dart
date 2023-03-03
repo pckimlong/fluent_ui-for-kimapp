@@ -258,7 +258,7 @@ class ProgressFilledButton extends StatelessWidget {
           FluentTheme(
             data: context.theme.copyWith(
               iconTheme: context.theme.iconTheme
-                  .copyWith(color: isProgressing ? Colors.transparent : Colors.white),
+                  .copyWith(color: isProgressing ? Colors.transparent : Colors.white, size: 14.0),
             ),
             child: DefaultTextStyle(
               style: context.textTheme.body!
