@@ -148,9 +148,7 @@ class _BaseButtonState extends State<BaseButton> {
           child: AnimatedContainer(
             duration: FluentTheme.of(context).fasterAnimationDuration,
             curve: FluentTheme.of(context).animationCurve,
-            constraints: BoxConstraints(
-              minHeight: theme.extension<KimappStyle>()!.baseComponentHeight,
-            ),
+            height: theme.extension<KimappStyle>()!.baseComponentHeight,
             decoration: ShapeDecoration(
               shape: resolvedShape.copyWith(side: resolvedBorder),
               color: resolvedBackgroundColor,
