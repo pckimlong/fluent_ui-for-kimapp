@@ -13,10 +13,13 @@ class KimappStyle extends ThemeExtension<KimappStyle> {
   final double borderRadius;
   final double baseComponentHeight;
   final Color borderColor;
+  final double borderWidth;
+
   KimappStyle({
     required this.borderRadius,
     required this.baseComponentHeight,
     required this.borderColor,
+    required this.borderWidth,
   });
 
   @override
@@ -83,6 +86,7 @@ FluentThemeData kimappFluentTheme({
         borderRadius: borderRadius,
         baseComponentHeight: componentHeight,
         borderColor: borderColor ?? DefaultKimappFluentStyle.defaultBorderColor,
+        borderWidth: borderWidth,
       ),
     ],
   );

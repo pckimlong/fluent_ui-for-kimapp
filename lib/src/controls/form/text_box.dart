@@ -1133,6 +1133,7 @@ class _TextBoxState extends State<TextBox>
                     borderRadius: radius,
                     border: Border.all(
                       color: kimapp?.borderColor ?? themeData.resources.controlStrokeColorDefault,
+                      width: kimapp?.borderWidth ?? 1,
                     ),
                     color: backgroundColor(states),
                   ).copyWith(
