@@ -25,8 +25,7 @@ class KimappStyle extends ThemeExtension<KimappStyle> {
 
   @override
   ThemeExtension<KimappStyle> lerp(covariant ThemeExtension<KimappStyle>? other, double t) {
-    // TODO: implement lerp
-    throw UnimplementedError();
+    return this;
   }
 }
 
