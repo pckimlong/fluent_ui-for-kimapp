@@ -1155,6 +1155,9 @@ class _TextBoxState extends State<TextBox>
                     duration: themeData.fasterAnimationDuration,
                     curve: themeData.animationCurve,
                     foregroundDecoration: foregroundDecoration,
+                    constraints: kimapp?.baseComponentHeight == null
+                        ? null
+                        : BoxConstraints(minHeight: kimapp!.baseComponentHeight),
                     child: _selectionGestureDetectorBuilder.buildGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       child: Align(
