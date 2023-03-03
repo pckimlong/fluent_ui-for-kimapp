@@ -40,17 +40,17 @@ class _TextBoxSelectionGestureDetectorBuilder extends TextSelectionGestureDetect
 
   final _TextBoxState _state;
 
-  // @override
-  // void onSingleTapUp(TapUpDetails details) {
-  //   super.onSingleTapUp(details);
-  //   _state._requestKeyboard();
-  //   _state.widget.onTap?.call();
-  // }
+  @override
+  void onSingleTapUp(TapUpDetails details) {
+    super.onSingleTapUp(details);
+    _state._requestKeyboard();
+    _state.widget.onTap?.call();
+  }
 
-  // @override
-  // void onDragSelectionEnd(DragEndDetails details) {
-  //   _state._requestKeyboard();
-  // }
+  @override
+  void onDragSelectionEnd(DragEndDetails details) {
+    _state._requestKeyboard();
+  }
 }
 
 /// A fluent-style text field.
