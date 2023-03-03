@@ -7,6 +7,10 @@ abstract class DefaultKimappFluentStyle {
   static const double defaultBorderRadius = 4;
   static const double defaultComponentHeight = 33.5;
   static final Color defaultBorderColor = Colors.black.withOpacity(0.3);
+
+  static const double mobileBreakpoint = 480;
+  static const double tabletBreakpoint = 800;
+  static const double desktopBreakpoint = 1000;
 }
 
 class KimappStyle extends ThemeExtension<KimappStyle> {
@@ -90,4 +94,260 @@ FluentThemeData kimappFluentTheme({
       ),
     ],
   );
+}
+
+//
+extension BuildContextX on BuildContext {
+  FluentThemeData get theme => FluentTheme.of(this);
+  Typography get textTheme => theme.typography;
+  Color get primaryColor => theme.accentColor;
+
+  Size get screenSize => MediaQuery.of(this).size;
+  double get screenWidth => screenSize.width;
+  double get screenHeight => screenSize.height;
+
+  EdgeInsets get keyboardPadding => EdgeInsets.only(bottom: MediaQuery.of(this).viewInsets.bottom);
+}
+
+// custom widget
+
+class ResponsiveBox extends StatelessWidget {
+  const ResponsiveBox({
+    Key? key,
+    required this.builder,
+  }) : super(key: key);
+
+  final Widget Function(BuildContext context, BoxConstraints constraints, bool isMobile) builder;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraint) {
+        final isMobile = constraint.maxWidth <= DefaultKimappFluentStyle.mobileBreakpoint;
+        return builder(context, constraint, isMobile);
+      },
+    );
+  }
+}
+
+class MyInfoLabelTheme extends InheritedTheme {
+  const MyInfoLabelTheme({
+    Key? key,
+    this.labelWidth,
+    this.labelAlign = TextAlign.start,
+    this.labelStyle,
+    required super.child,
+  }) : super(key: key);
+
+  final double? labelWidth;
+  final TextStyle? labelStyle;
+  final TextAlign labelAlign;
+
+  static MyInfoLabelTheme? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<MyInfoLabelTheme>();
+  }
+
+  @override
+  bool updateShouldNotify(MyInfoLabelTheme oldWidget) {
+    return oldWidget.labelWidth != labelWidth;
+  }
+
+  @override
+  Widget wrap(BuildContext context, Widget child) {
+    return MyInfoLabelTheme(child: child);
+  }
+}
+
+class MyInfoLabel extends StatelessWidget {
+  MyInfoLabel({
+    Key? key,
+    this.child,
+    required String label,
+    TextStyle? labelStyle,
+    this.isHeader,
+    this.isHeaderOnMobile = true,
+    this.isRequired = false,
+  })  : label = TextSpan(
+          text: label,
+          style: labelStyle,
+          children: [if (isRequired) TextSpan(text: ' *', style: TextStyle(color: Colors.red))],
+        ),
+        super(key: key);
+
+  final InlineSpan label;
+
+  final Widget? child;
+
+  final bool? isHeader;
+
+  final bool isHeaderOnMobile;
+
+  final bool isRequired;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = MyInfoLabelTheme.maybeOf(context);
+
+    Widget labelWidget = Text.rich(
+      label,
+      textAlign: theme?.labelAlign ?? TextAlign.start,
+      style: theme?.labelStyle ?? context.textTheme.caption?.copyWith(fontWeight: FontWeight.bold),
+    );
+
+    final labelWidth = theme?.labelWidth;
+    if (labelWidth != null) {
+      labelWidget = SizedBox(
+        width: labelWidth,
+        child: labelWidget,
+      );
+    }
+
+    return ResponsiveBox(
+      builder: (BuildContext context, BoxConstraints constraints, bool isMobile) {
+        var isHeaderLayout = false;
+        if (isHeader != null) {
+          isHeaderLayout = isHeader!;
+        } else {
+          if (isHeaderOnMobile) {
+            isHeaderLayout = isMobile;
+          }
+        }
+
+        return Flex(
+          direction: isHeaderLayout ? Axis.vertical : Axis.horizontal,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: isHeaderLayout ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+          children: [
+            if (isHeaderLayout)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(bottom: 4.0),
+                child: labelWidget,
+              )
+            else
+              Padding(
+                padding: const EdgeInsetsDirectional.only(end: 12),
+                child: labelWidget,
+              ),
+            if (child != null) Flexible(child: child!),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ProgressFilledButton extends StatelessWidget {
+  const ProgressFilledButton({
+    Key? key,
+    this.onPressed,
+    this.isProgressing = false,
+    required this.child,
+  }) : super(key: key);
+
+  final VoidCallback? onPressed;
+  final bool isProgressing;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed: onPressed,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          FluentTheme(
+            data: context.theme.copyWith(
+              iconTheme: context.theme.iconTheme
+                  .copyWith(color: isProgressing ? Colors.transparent : null),
+            ),
+            child: DefaultTextStyle(
+              style: context.textTheme.body!
+                  .copyWith(color: isProgressing ? Colors.transparent : null),
+              child: child,
+            ),
+          ),
+          if (isProgressing)
+            const Positioned.fill(
+              child: Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: ProgressRing(strokeWidth: 3.5),
+                ),
+              ),
+            )
+        ],
+      ),
+    );
+  }
+}
+
+class ProgressButton extends StatelessWidget {
+  const ProgressButton({
+    Key? key,
+    this.onPressed,
+    this.isProgressing = false,
+    required this.child,
+  }) : super(key: key);
+
+  final VoidCallback? onPressed;
+  final bool isProgressing;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Button(
+      onPressed: onPressed,
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          FluentTheme(
+            data: context.theme.copyWith(
+              iconTheme: context.theme.iconTheme
+                  .copyWith(color: isProgressing ? Colors.transparent : null),
+            ),
+            child: DefaultTextStyle(
+              style: context.textTheme.body!
+                  .copyWith(color: isProgressing ? Colors.transparent : null),
+              child: child,
+            ),
+          ),
+          if (isProgressing)
+            const Positioned.fill(
+              child: Center(
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: ProgressRing(strokeWidth: 3.5),
+                ),
+              ),
+            )
+        ],
+      ),
+    );
+  }
+}
+
+class ProgressDivider extends StatelessWidget {
+  const ProgressDivider({
+    super.key,
+    this.width,
+    this.isProgressing = false,
+  });
+
+  final bool isProgressing;
+  final double? width;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: isProgressing
+          ? SizedBox(
+              width: double.infinity,
+              child: ProgressBar(strokeWidth: context.theme.dividerTheme.thickness ?? 1),
+            )
+          : const Divider(),
+    );
+  }
 }

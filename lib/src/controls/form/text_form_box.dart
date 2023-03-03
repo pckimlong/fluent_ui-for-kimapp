@@ -127,13 +127,11 @@ class TextFormBox extends FormField<String> {
           !expands || (maxLines == null && minLines == null),
           'minLines and maxLines must be null when expands is true.',
         ),
-        assert(!obscureText || maxLines == 1,
-            'Obscured fields cannot be multiline.'),
+        assert(!obscureText || maxLines == 1, 'Obscured fields cannot be multiline.'),
         assert(maxLength == null || maxLength > 0),
         super(
           key: key,
-          initialValue:
-              controller != null ? controller.text : (initialValue ?? ''),
+          initialValue: controller != null ? controller.text : (initialValue ?? ''),
           onSaved: onSaved,
           validator: validator,
           autovalidateMode: autovalidateMode,
@@ -152,8 +150,7 @@ class TextFormBox extends FormField<String> {
               bucket: field.bucket,
               child: FormRow(
                 padding: EdgeInsets.zero,
-                error:
-                    (field.errorText == null) ? null : Text(field.errorText!),
+                error: (field.errorText == null) ? null : Text(field.errorText!),
                 child: TextBox(
                   controller: state._effectiveController,
                   focusNode: focusNode,
@@ -171,13 +168,9 @@ class TextFormBox extends FormField<String> {
                   obscureText: obscureText,
                   autocorrect: autocorrect,
                   smartDashesType: smartDashesType ??
-                      (obscureText
-                          ? SmartDashesType.disabled
-                          : SmartDashesType.enabled),
+                      (obscureText ? SmartDashesType.disabled : SmartDashesType.enabled),
                   smartQuotesType: smartQuotesType ??
-                      (obscureText
-                          ? SmartQuotesType.disabled
-                          : SmartQuotesType.enabled),
+                      (obscureText ? SmartQuotesType.disabled : SmartQuotesType.enabled),
                   enableSuggestions: enableSuggestions,
                   maxLines: maxLines,
                   minLines: minLines,
@@ -240,8 +233,7 @@ class TextFormBox extends FormField<String> {
 class _TextFormBoxState extends FormFieldState<String> {
   TextEditingController? _controller;
 
-  TextEditingController? get _effectiveController =>
-      widget.controller ?? _controller;
+  TextEditingController? get _effectiveController => widget.controller ?? _controller;
 
   @override
   TextFormBox get widget => super.widget as TextFormBox;
@@ -264,8 +256,7 @@ class _TextFormBoxState extends FormFieldState<String> {
       widget.controller?.addListener(_handleControllerChanged);
 
       if (oldWidget.controller != null && widget.controller == null) {
-        _controller =
-            TextEditingController.fromValue(oldWidget.controller!.value);
+        _controller = TextEditingController.fromValue(oldWidget.controller!.value);
       }
 
       if (widget.controller != null) {
