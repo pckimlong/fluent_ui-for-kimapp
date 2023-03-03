@@ -12,9 +12,11 @@ abstract class DefaultKimappFluentStyle {
 class KimappStyle extends ThemeExtension<KimappStyle> {
   final double borderRadius;
   final double baseComponentHeight;
+  final Color borderColor;
   KimappStyle({
     required this.borderRadius,
     required this.baseComponentHeight,
+    required this.borderColor,
   });
 
   @override
@@ -80,6 +82,7 @@ FluentThemeData kimappFluentTheme({
       KimappStyle(
         borderRadius: borderRadius,
         baseComponentHeight: componentHeight,
+        borderColor: borderColor ?? DefaultKimappFluentStyle.defaultBorderColor,
       ),
     ],
   );

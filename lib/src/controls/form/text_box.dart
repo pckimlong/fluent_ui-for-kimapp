@@ -1101,8 +1101,10 @@ class _TextBoxState extends State<TextBox>
       shape: widget.foregroundDecoration?.shape,
     );
 
+    final kimapp = themeData.extension<KimappStyle>();
+
     final radius = widget.decoration?.borderRadius?.resolve(Directionality.of(context)) ??
-        BorderRadius.circular(themeData.extension<KimappStyle>()?.borderRadius ?? 4);
+        BorderRadius.circular(kimapp?.borderRadius ?? 4);
 
     return Semantics(
       enabled: enabled,
@@ -1130,7 +1132,7 @@ class _TextBoxState extends State<TextBox>
                   decoration: BoxDecoration(
                     borderRadius: radius,
                     border: Border.all(
-                      color: themeData.resources.controlStrokeColorDefault,
+                      color: kimapp?.borderColor ?? themeData.resources.controlStrokeColorDefault,
                     ),
                     color: backgroundColor(states),
                   ).copyWith(
