@@ -132,7 +132,7 @@ class _BaseButtonState extends State<BaseButton> {
         final padding = resolvedPadding
             .add(EdgeInsets.symmetric(
               horizontal: theme.visualDensity.horizontal,
-              vertical: theme.visualDensity.vertical,
+              // vertical: theme.visualDensity.vertical, // Since I applier default height for button
             ))
             .clamp(EdgeInsets.zero, EdgeInsetsGeometry.infinity);
         final iconSize = resolve<double?>((style) => style?.iconSize);
