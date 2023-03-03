@@ -80,10 +80,8 @@ abstract class BaseButton extends StatefulWidget {
     super.debugFillProperties(properties);
     properties
       ..add(FlagProperty('enabled', value: enabled, ifFalse: 'disabled'))
-      ..add(
-          DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null))
-      ..add(DiagnosticsProperty<FocusNode>('focusNode', focusNode,
-          defaultValue: null));
+      ..add(DiagnosticsProperty<ButtonStyle>('style', style, defaultValue: null))
+      ..add(DiagnosticsProperty<FocusNode>('focusNode', focusNode, defaultValue: null));
   }
 }
 
@@ -111,31 +109,25 @@ class _BaseButtonState extends State<BaseButton> {
       onLongPress: widget.onLongPress,
       focusEnabled: widget.focusable,
       builder: (context, states) {
-        T? resolve<T>(
-            ButtonState<T>? Function(ButtonStyle? style) getProperty) {
+        T? resolve<T>(ButtonState<T>? Function(ButtonStyle? style) getProperty) {
           return effectiveValue(
             (ButtonStyle? style) => getProperty(style)?.resolve(states),
           );
         }
 
-        final resolvedElevation =
-            resolve<double?>((ButtonStyle? style) => style?.elevation);
-        final resolvedTextStyle = theme.typography.body?.merge(
-            resolve<TextStyle?>((ButtonStyle? style) => style?.textStyle));
+        final resolvedElevation = resolve<double?>((ButtonStyle? style) => style?.elevation);
+        final resolvedTextStyle = theme.typography.body
+            ?.merge(resolve<TextStyle?>((ButtonStyle? style) => style?.textStyle));
         final resolvedBackgroundColor =
             resolve<Color?>((ButtonStyle? style) => style?.backgroundColor);
         final resolvedForegroundColor =
             resolve<Color?>((ButtonStyle? style) => style?.foregroundColor);
-        final resolvedShadowColor =
-            resolve<Color?>((ButtonStyle? style) => style?.shadowColor);
-        final resolvedPadding = resolve<EdgeInsetsGeometry?>(
-                (ButtonStyle? style) => style?.padding) ??
-            EdgeInsets.zero;
-        final resolvedBorder =
-            resolve<BorderSide?>((ButtonStyle? style) => style?.border);
-        final resolvedShape =
-            resolve<OutlinedBorder?>((ButtonStyle? style) => style?.shape) ??
-                const RoundedRectangleBorder();
+        final resolvedShadowColor = resolve<Color?>((ButtonStyle? style) => style?.shadowColor);
+        final resolvedPadding =
+            resolve<EdgeInsetsGeometry?>((ButtonStyle? style) => style?.padding) ?? EdgeInsets.zero;
+        final resolvedBorder = resolve<BorderSide?>((ButtonStyle? style) => style?.border);
+        final resolvedShape = resolve<OutlinedBorder?>((ButtonStyle? style) => style?.shape) ??
+            const RoundedRectangleBorder();
 
         final padding = resolvedPadding
             .add(EdgeInsets.symmetric(
@@ -156,6 +148,9 @@ class _BaseButtonState extends State<BaseButton> {
           child: AnimatedContainer(
             duration: FluentTheme.of(context).fasterAnimationDuration,
             curve: FluentTheme.of(context).animationCurve,
+            constraints: BoxConstraints(
+              minHeight: theme.extension<KimappStyle>()!.baseComponentHeight,
+            ),
             decoration: ShapeDecoration(
               shape: resolvedShape.copyWith(side: resolvedBorder),
               color: resolvedBackgroundColor,

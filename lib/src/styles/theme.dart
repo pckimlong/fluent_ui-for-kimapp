@@ -54,8 +54,7 @@ class _FluentTheme extends InheritedTheme {
   final FluentThemeData data;
 
   @override
-  bool updateShouldNotify(covariant _FluentTheme oldWidget) =>
-      oldWidget.data != data;
+  bool updateShouldNotify(covariant _FluentTheme oldWidget) => oldWidget.data != data;
 
   @override
   Widget wrap(BuildContext context, Widget child) {
@@ -119,21 +118,16 @@ class AnimatedFluentTheme extends ImplicitlyAnimatedWidget {
   final Widget child;
 
   @override
-  AnimatedWidgetBaseState<AnimatedFluentTheme> createState() =>
-      _AnimatedFluentThemeState();
+  AnimatedWidgetBaseState<AnimatedFluentTheme> createState() => _AnimatedFluentThemeState();
 }
 
-class _AnimatedFluentThemeState
-    extends AnimatedWidgetBaseState<AnimatedFluentTheme> {
+class _AnimatedFluentThemeState extends AnimatedWidgetBaseState<AnimatedFluentTheme> {
   FluentThemeDataTween? _data;
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    _data = visitor(
-            _data,
-            widget.data,
-            (dynamic value) =>
-                FluentThemeDataTween(begin: value as FluentThemeData))!
+    _data = visitor(_data, widget.data,
+            (dynamic value) => FluentThemeDataTween(begin: value as FluentThemeData))!
         as FluentThemeDataTween;
   }
 
@@ -284,25 +278,21 @@ class FluentThemeData with Diagnosticable {
     final isLight = brightness == Brightness.light;
 
     visualDensity ??= VisualDensity.adaptivePlatformDensity;
-    fasterAnimationDuration ??= const Duration(milliseconds: 83);
-    fastAnimationDuration ??= const Duration(milliseconds: 167);
-    mediumAnimationDuration ??= const Duration(milliseconds: 250);
-    slowAnimationDuration ??= const Duration(milliseconds: 358);
-    resources ??= isLight
-        ? const ResourceDictionary.light()
-        : const ResourceDictionary.dark();
+    fasterAnimationDuration ??= const Duration(milliseconds: 50);
+    fastAnimationDuration ??= const Duration(milliseconds: 120);
+    mediumAnimationDuration ??= const Duration(milliseconds: 200);
+    slowAnimationDuration ??= const Duration(milliseconds: 300);
+    resources ??= isLight ? const ResourceDictionary.light() : const ResourceDictionary.dark();
     animationCurve ??= standardCurve;
     accentColor ??= Colors.blue;
     activeColor ??= Colors.white;
     inactiveColor ??= isLight ? Colors.black : Colors.white;
-    inactiveBackgroundColor ??=
-        isLight ? const Color(0xFFd6d6d6) : const Color(0xFF292929);
+    inactiveBackgroundColor ??= isLight ? const Color(0xFFd6d6d6) : const Color(0xFF292929);
     disabledColor ??= resources.textFillColorDisabled;
     shadowColor ??= isLight ? Colors.black : Colors.grey[130];
     scaffoldBackgroundColor ??= resources.layerFillColorDefault;
-    acrylicBackgroundColor ??= isLight
-        ? resources.layerOnAcrylicFillColorDefault
-        : const Color(0xFF2c2c2c);
+    acrylicBackgroundColor ??=
+        isLight ? resources.layerOnAcrylicFillColorDefault : const Color(0xFF2c2c2c);
     micaBackgroundColor ??= resources.solidBackgroundFillColorBase;
     uncheckedColor ??= isLight
         ? const Color.fromRGBO(0, 0, 0, 0.6063)
@@ -464,15 +454,11 @@ class FluentThemeData with Diagnosticable {
       typography: Typography.lerp(a.typography, b.typography, t),
       activeColor: Color.lerp(a.activeColor, b.activeColor, t)!,
       inactiveColor: Color.lerp(a.inactiveColor, b.inactiveColor, t)!,
-      inactiveBackgroundColor:
-          Color.lerp(a.inactiveBackgroundColor, b.inactiveBackgroundColor, t)!,
+      inactiveBackgroundColor: Color.lerp(a.inactiveBackgroundColor, b.inactiveBackgroundColor, t)!,
       disabledColor: Color.lerp(a.disabledColor, b.disabledColor, t)!,
-      scaffoldBackgroundColor:
-          Color.lerp(a.scaffoldBackgroundColor, b.scaffoldBackgroundColor, t)!,
-      acrylicBackgroundColor:
-          Color.lerp(a.acrylicBackgroundColor, b.acrylicBackgroundColor, t)!,
-      micaBackgroundColor:
-          Color.lerp(a.micaBackgroundColor, b.micaBackgroundColor, t)!,
+      scaffoldBackgroundColor: Color.lerp(a.scaffoldBackgroundColor, b.scaffoldBackgroundColor, t)!,
+      acrylicBackgroundColor: Color.lerp(a.acrylicBackgroundColor, b.acrylicBackgroundColor, t)!,
+      micaBackgroundColor: Color.lerp(a.micaBackgroundColor, b.micaBackgroundColor, t)!,
       shadowColor: Color.lerp(a.shadowColor, b.shadowColor, t)!,
       uncheckedColor: Color.lerp(a.uncheckedColor, b.uncheckedColor, t)!,
       checkedColor: Color.lerp(a.checkedColor, b.checkedColor, t)!,
@@ -480,44 +466,34 @@ class FluentThemeData with Diagnosticable {
       cardColor: Color.lerp(a.cardColor, b.cardColor, t)!,
       fasterAnimationDuration:
           lerpDuration(a.fasterAnimationDuration, b.fasterAnimationDuration, t),
-      fastAnimationDuration:
-          lerpDuration(a.fastAnimationDuration, b.fastAnimationDuration, t),
+      fastAnimationDuration: lerpDuration(a.fastAnimationDuration, b.fastAnimationDuration, t),
       mediumAnimationDuration:
           lerpDuration(a.mediumAnimationDuration, b.mediumAnimationDuration, t),
-      slowAnimationDuration:
-          lerpDuration(a.slowAnimationDuration, b.slowAnimationDuration, t),
+      slowAnimationDuration: lerpDuration(a.slowAnimationDuration, b.slowAnimationDuration, t),
       animationCurve: t < 0.5 ? a.animationCurve : b.animationCurve,
       buttonTheme: ButtonThemeData.lerp(a.buttonTheme, b.buttonTheme, t),
-      checkboxTheme:
-          CheckboxThemeData.lerp(a.checkboxTheme, b.checkboxTheme, t),
+      checkboxTheme: CheckboxThemeData.lerp(a.checkboxTheme, b.checkboxTheme, t),
       chipTheme: ChipThemeData.lerp(a.chipTheme, b.chipTheme, t),
-      toggleSwitchTheme: ToggleSwitchThemeData.lerp(
-          a.toggleSwitchTheme, b.toggleSwitchTheme, t),
+      toggleSwitchTheme: ToggleSwitchThemeData.lerp(a.toggleSwitchTheme, b.toggleSwitchTheme, t),
       iconTheme: IconThemeData.lerp(a.iconTheme, b.iconTheme, t),
-      splitButtonTheme:
-          SplitButtonThemeData.lerp(a.splitButtonTheme, b.splitButtonTheme, t),
+      splitButtonTheme: SplitButtonThemeData.lerp(a.splitButtonTheme, b.splitButtonTheme, t),
       dialogTheme: ContentDialogThemeData.lerp(a.dialogTheme, b.dialogTheme, t),
       tooltipTheme: TooltipThemeData.lerp(a.tooltipTheme, b.tooltipTheme, t),
       dividerTheme: DividerThemeData.lerp(a.dividerTheme, b.dividerTheme, t),
-      navigationPaneTheme: NavigationPaneThemeData.lerp(
-          a.navigationPaneTheme, b.navigationPaneTheme, t),
-      radioButtonTheme:
-          RadioButtonThemeData.lerp(a.radioButtonTheme, b.radioButtonTheme, t),
-      toggleButtonTheme: ToggleButtonThemeData.lerp(
-          a.toggleButtonTheme, b.toggleButtonTheme, t),
+      navigationPaneTheme:
+          NavigationPaneThemeData.lerp(a.navigationPaneTheme, b.navigationPaneTheme, t),
+      radioButtonTheme: RadioButtonThemeData.lerp(a.radioButtonTheme, b.radioButtonTheme, t),
+      toggleButtonTheme: ToggleButtonThemeData.lerp(a.toggleButtonTheme, b.toggleButtonTheme, t),
       sliderTheme: SliderThemeData.lerp(a.sliderTheme, b.sliderTheme, t),
       infoBarTheme: InfoBarThemeData.lerp(a.infoBarTheme, b.infoBarTheme, t),
       focusTheme: FocusThemeData.lerp(a.focusTheme, b.focusTheme, t),
-      scrollbarTheme:
-          ScrollbarThemeData.lerp(a.scrollbarTheme, b.scrollbarTheme, t),
-      bottomNavigationTheme: BottomNavigationThemeData.lerp(
-          a.bottomNavigationTheme, b.bottomNavigationTheme, t),
-      snackbarTheme:
-          SnackbarThemeData.lerp(a.snackbarTheme, b.snackbarTheme, t),
-      pillButtonBarTheme: PillButtonBarThemeData.lerp(
-          a.pillButtonBarTheme, b.pillButtonBarTheme, t),
-      bottomSheetTheme:
-          BottomSheetThemeData.lerp(a.bottomSheetTheme, b.bottomSheetTheme, t),
+      scrollbarTheme: ScrollbarThemeData.lerp(a.scrollbarTheme, b.scrollbarTheme, t),
+      bottomNavigationTheme:
+          BottomNavigationThemeData.lerp(a.bottomNavigationTheme, b.bottomNavigationTheme, t),
+      snackbarTheme: SnackbarThemeData.lerp(a.snackbarTheme, b.snackbarTheme, t),
+      pillButtonBarTheme:
+          PillButtonBarThemeData.lerp(a.pillButtonBarTheme, b.pillButtonBarTheme, t),
+      bottomSheetTheme: BottomSheetThemeData.lerp(a.bottomSheetTheme, b.bottomSheetTheme, t),
       menuColor: Color.lerp(a.menuColor, b.menuColor, t)!,
     );
   }
@@ -533,8 +509,7 @@ class FluentThemeData with Diagnosticable {
   /// to the stored [extensions] map, where each entry's key consists of the extension's type.
   static Map<Object, ThemeExtension<dynamic>> _themeExtensionIterableToMap(
       Iterable<ThemeExtension<dynamic>> extensionsIterable) {
-    return Map<Object, ThemeExtension<dynamic>>.unmodifiable(<Object,
-        ThemeExtension<dynamic>>{
+    return Map<Object, ThemeExtension<dynamic>>.unmodifiable(<Object, ThemeExtension<dynamic>>{
       // Strangely, the cast is necessary for tests to run.
       for (final ThemeExtension<dynamic> extension in extensionsIterable)
         extension.type: extension as ThemeExtension<ThemeExtension<dynamic>>,
@@ -591,9 +566,7 @@ class FluentThemeData with Diagnosticable {
       brightness: brightness ?? this.brightness,
       visualDensity: visualDensity ?? this.visualDensity,
       typography: this.typography.merge(typography),
-      extensions: extensions != null
-          ? _themeExtensionIterableToMap(extensions)
-          : this.extensions,
+      extensions: extensions != null ? _themeExtensionIterableToMap(extensions) : this.extensions,
       accentColor: accentColor ?? this.accentColor,
       activeColor: activeColor ?? this.activeColor,
       inactiveColor: inactiveColor ?? this.inactiveColor,
@@ -601,28 +574,20 @@ class FluentThemeData with Diagnosticable {
       uncheckedColor: uncheckedColor ?? this.uncheckedColor,
       checkedColor: checkedColor ?? this.checkedColor,
       borderInputColor: borderInputColor ?? this.borderInputColor,
-      inactiveBackgroundColor:
-          inactiveBackgroundColor ?? this.inactiveBackgroundColor,
+      inactiveBackgroundColor: inactiveBackgroundColor ?? this.inactiveBackgroundColor,
       disabledColor: disabledColor ?? this.disabledColor,
-      scaffoldBackgroundColor:
-          scaffoldBackgroundColor ?? this.scaffoldBackgroundColor,
-      acrylicBackgroundColor:
-          acrylicBackgroundColor ?? this.acrylicBackgroundColor,
+      scaffoldBackgroundColor: scaffoldBackgroundColor ?? this.scaffoldBackgroundColor,
+      acrylicBackgroundColor: acrylicBackgroundColor ?? this.acrylicBackgroundColor,
       micaBackgroundColor: micaBackgroundColor ?? this.micaBackgroundColor,
       menuColor: menuColor ?? this.menuColor,
       cardColor: cardColor ?? this.cardColor,
-      fasterAnimationDuration:
-          fasterAnimationDuration ?? this.fasterAnimationDuration,
-      fastAnimationDuration:
-          fastAnimationDuration ?? this.fastAnimationDuration,
-      mediumAnimationDuration:
-          mediumAnimationDuration ?? this.mediumAnimationDuration,
-      slowAnimationDuration:
-          slowAnimationDuration ?? this.slowAnimationDuration,
+      fasterAnimationDuration: fasterAnimationDuration ?? this.fasterAnimationDuration,
+      fastAnimationDuration: fastAnimationDuration ?? this.fastAnimationDuration,
+      mediumAnimationDuration: mediumAnimationDuration ?? this.mediumAnimationDuration,
+      slowAnimationDuration: slowAnimationDuration ?? this.slowAnimationDuration,
       animationCurve: animationCurve ?? this.animationCurve,
       buttonTheme: this.buttonTheme.merge(buttonTheme),
-      bottomNavigationTheme:
-          this.bottomNavigationTheme.merge(bottomNavigationTheme),
+      bottomNavigationTheme: this.bottomNavigationTheme.merge(bottomNavigationTheme),
       bottomSheetTheme: this.bottomSheetTheme.merge(bottomSheetTheme),
       checkboxTheme: this.checkboxTheme.merge(checkboxTheme),
       chipTheme: this.chipTheme.merge(chipTheme),

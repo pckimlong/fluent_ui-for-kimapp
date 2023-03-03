@@ -34,11 +34,12 @@ export 'package:flutter/material.dart'
 export 'package:flutter/widgets.dart' hide TextBox;
 export 'package:scroll_pos/scroll_pos.dart';
 
+// My custom style
+export 'kimapp.dart';
+
 export 'l10n/extension/fluent_localizations_extension.dart';
 export 'l10n/generated/fluent_localizations.dart';
-
 export 'src/app.dart';
-
 export 'src/controls/flyouts/content.dart';
 export 'src/controls/flyouts/content_manager.dart';
 export 'src/controls/flyouts/flyout.dart';
@@ -87,14 +88,10 @@ export 'src/controls/utils/divider.dart';
 export 'src/controls/utils/hover_button.dart';
 export 'src/controls/utils/info_badge.dart';
 export 'src/controls/utils/scrollbar.dart';
-
 export 'src/icons.dart';
-
 export 'src/layout/dynamic_overflow.dart';
 export 'src/layout/page.dart';
-
 export 'src/navigation/route.dart';
-
 export 'src/styles/acrylic.dart';
 export 'src/styles/color.dart' hide ColorConst;
 export 'src/styles/color_resources.dart';
@@ -103,7 +100,6 @@ export 'src/styles/mica.dart';
 export 'src/styles/motion/page_transitions.dart';
 export 'src/styles/theme.dart';
 export 'src/styles/typography.dart';
-
 export 'src/utils.dart';
 export 'src/utils/horizontal_scroll_view.dart';
 export 'src/utils/label.dart';
