@@ -1,5 +1,23 @@
 ## [next]
 
+- Do not calculate the position of the flyout if the `position` parameter is provided. ([#764](https://github.com/bdlukaa/fluent_ui/issues/764))
+- Add source code for Surfaces/CommandBar in example application ([#766](https://github.com/bdlukaa/fluent_ui/pull/766))
+- Do not enforce a max height on `PaneItem` ([#762](https://github.com/bdlukaa/fluent_ui/issues/762))
+- Add Greek localization ([#761](https://github.com/bdlukaa/fluent_ui/pull/761))
+- Add `NavigationState.compactOverlayOpen` ([#758](https://github.com/bdlukaa/fluent_ui/issues/758)):
+  ```dart
+  final key = GlobalKey<NavigationState>();
+
+  NavigationView(key: key);
+
+  final isCompactModeOpen = key.currentState?.compactOverlayOpen ?? false;
+  ```
+- `TabView` lazy loading ([#751](https://github.com/bdlukaa/fluent_ui/issues/751))
+
+## 4.4.1
+
+- Dynamically adding/removing items in NavigationPane ([#744](https://github.com/bdlukaa/fluent_ui/issues/744))
+- Fix example application was showing window icons twice on transparency change and maximizing
 - Add `TextFormBox.initialValue` ([#749](https://github.com/bdlukaa/fluent_ui/issues/749))
 - Add `PaneItem.enabled` ([#748](https://github.com/bdlukaa/fluent_ui/discussions/748))
 - Add Thai localization ([#750](https://github.com/bdlukaa/fluent_ui/pull/750))
@@ -22,6 +40,9 @@
     }
   )
   ```
+- Use correct height and padding on `TextBox` ([#754](https://github.com/bdlukaa/fluent_ui/pull/754))
+- Updated `TextBox` cursor to match the native implementation ([#754](https://github.com/bdlukaa/fluent_ui/pull/754))
+- `TextBox` state is now updated correctly when focused ([#754](https://github.com/bdlukaa/fluent_ui/pull/754))
 
 ## 4.4.0
 
