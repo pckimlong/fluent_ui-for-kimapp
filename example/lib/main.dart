@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 import 'package:url_launcher/link.dart';
-import 'package:url_strategy/url_strategy.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'routes/forms.dart' deferred as forms;
@@ -43,8 +42,6 @@ void main() async {
     SystemTheme.accentColor.load();
   }
 
-  setPathUrlStrategy();
-
   if (isDesktop) {
     await flutter_acrylic.Window.initialize();
     await flutter_acrylic.Window.hideWindowControls();
@@ -54,9 +51,7 @@ void main() async {
         TitleBarStyle.hidden,
         windowButtonVisibility: false,
       );
-      await windowManager.setSize(const Size(755, 545));
-      await windowManager.setMinimumSize(const Size(350, 600));
-      await windowManager.center();
+      await windowManager.setMinimumSize(const Size(500, 600));
       await windowManager.show();
       await windowManager.setPreventClose(true);
       await windowManager.setSkipTaskbar(false);
@@ -77,6 +72,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
+
   // private navigators
 
   @override
@@ -241,6 +237,28 @@ class _MyHomePageState extends State<MyHomePage> with WindowListener {
       onTap: () {
         if (router.location != '/forms/combobox') {
           router.pushNamed('forms_combobox');
+        }
+      },
+    ),
+    PaneItem(
+      key: const Key('/forms/numberbox'),
+      icon: const Icon(FluentIcons.number),
+      title: const Text('NumberBox'),
+      body: const SizedBox.shrink(),
+      onTap: () {
+        if (router.location != '/forms/numberbox') {
+          router.pushNamed('forms_numberbox');
+        }
+      },
+    ),
+    PaneItem(
+      key: const Key('/forms/passwordbox'),
+      icon: const Icon(FluentIcons.password_field),
+      title: const Text('PasswordBox'),
+      body: const SizedBox.shrink(),
+      onTap: () {
+        if (router.location != '/forms/passwordbox') {
+          router.pushNamed('forms_passwordbox');
         }
       },
     ),
@@ -755,10 +773,10 @@ class _LinkPaneItemAction extends PaneItem {
   }
 }
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final router = GoRouter(
-  navigatorKey: _rootNavigatorKey,
+  navigatorKey: rootNavigatorKey,
   routes: [
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
@@ -853,6 +871,25 @@ final router = GoRouter(
           builder: (context, state) => DeferredWidget(
             forms.loadLibrary,
             () => forms.ComboBoxPage(),
+          ),
+        ),
+
+        /// NumberBox
+        GoRoute(
+          path: '/forms/numberbox',
+          name: 'forms_numberbox',
+          builder: (context, state) => DeferredWidget(
+            forms.loadLibrary,
+            () => forms.NumberBoxPage(),
+          ),
+        ),
+
+        GoRoute(
+          path: '/forms/passwordbox',
+          name: 'forms_passwordbox',
+          builder: (context, state) => DeferredWidget(
+            forms.loadLibrary,
+            () => forms.PasswordBoxPage(),
           ),
         ),
 
