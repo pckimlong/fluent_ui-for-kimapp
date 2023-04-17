@@ -1,10 +1,14 @@
-## [Next]
+## 4.5.0
 
+- **MINOR BREAKING** Remove default value of `backButtonDispatcher` when using `FluentApp.router` ([#803](https://github.com/bdlukaa/fluent_ui/pull/803))
 - Add parameters `onTapDown` and `onTapUp` on all buttons. ([#795](https://github.com/bdlukaa/fluent_ui/pull/795))
    - **Breaking: if you use the abstract class `BaseButton`, these two parameters are now required** 
-- Add `PasswordBox` widget. ([#795](https://github.com/bdlukaa/fluent_ui/pull/795))
+- Add `PasswordBox` widget ([#795](https://github.com/bdlukaa/fluent_ui/pull/795))
 - Improve example in Navigation/NavigationView in app. ([#796](https://github.com/bdlukaa/fluent_ui/pull/796))
 - Added Tamil language localization. ([#798](https://github.com/bdlukaa/fluent_ui/pull/798))
+- **BREAKING CHANGE** `TextButton` is renamed to `HyperlinkButton` and `ButtonThemeData.textButtonStyle` is renamed to `ButtonThemeData.hyperlinkButtonStyle` ([#802](https://github.com/bdlukaa/fluent_ui/pull/802))
+- Added `.notificationPredicate`, `.scrollbarOrientation`, `.pressDuration` and `.minOverscrollLength` to `Scrollbar` ([#809](https://github.com/bdlukaa/fluent_ui/issues/809))
+- Rebuild the `TreeView` elements on item invocation ([#810](https://github.com/bdlukaa/fluent_ui/issues/810))
 
 ## 4.4.2
 
