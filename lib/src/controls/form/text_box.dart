@@ -1088,12 +1088,12 @@ class _TextBoxState extends State<TextBox>
                     themeData.brightness,
                   )
               : !enabled
-                  ? kimapp?.borderColor ?? themeData.resources.controlStrokeColorDefault
+                  ? Colors.transparent
                   : widget.unfocusedColor ??
                       (themeData.brightness.isLight
                           ? const Color.fromRGBO(0, 0, 0, 0.45)
                           : const Color.fromRGBO(255, 255, 255, 0.54)),
-          width: _effectiveFocusNode.hasFocus ? 2 : 0,
+          width: _effectiveFocusNode.hasFocus ? 2 : 1,
         ),
       ),
     ).copyWith(
