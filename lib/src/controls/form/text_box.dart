@@ -1093,7 +1093,7 @@ class _TextBoxState extends State<TextBox>
                       (themeData.brightness.isLight
                           ? const Color.fromRGBO(0, 0, 0, 0.45)
                           : const Color.fromRGBO(255, 255, 255, 0.54)),
-          width: _effectiveFocusNode.hasFocus ? 2 : 1,
+          width: _effectiveFocusNode.hasFocus ? 2 : kimapp?.borderWidth ?? 1,
         ),
       ),
     ).copyWith(
