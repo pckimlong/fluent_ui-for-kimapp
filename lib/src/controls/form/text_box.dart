@@ -1077,6 +1077,8 @@ class _TextBoxState extends State<TextBox>
           .merge(widget.placeholderStyle);
     }
 
+    final kimapp = themeData.extension<KimappStyle>();
+
     final foregroundDecoration = BoxDecoration(
       border: Border(
         bottom: BorderSide(
@@ -1086,7 +1088,7 @@ class _TextBoxState extends State<TextBox>
                     themeData.brightness,
                   )
               : !enabled
-                  ? Colors.transparent
+                  ? kimapp?.borderColor ?? themeData.resources.controlStrokeColorDefault
                   : widget.unfocusedColor ??
                       (themeData.brightness.isLight
                           ? const Color.fromRGBO(0, 0, 0, 0.45)
@@ -1104,8 +1106,6 @@ class _TextBoxState extends State<TextBox>
       image: widget.foregroundDecoration?.image,
       shape: widget.foregroundDecoration?.shape,
     );
-
-    final kimapp = themeData.extension<KimappStyle>();
 
     final radius = widget.decoration?.borderRadius?.resolve(Directionality.of(context)) ??
         BorderRadius.circular(kimapp?.borderRadius ?? 4);
