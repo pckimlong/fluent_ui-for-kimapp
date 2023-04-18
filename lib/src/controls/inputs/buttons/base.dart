@@ -115,6 +115,7 @@ class _BaseButtonState extends State<BaseButton> {
   Widget build(BuildContext context) {
     assert(debugCheckHasFluentTheme(context));
     final theme = FluentTheme.of(context);
+    final kimappComponentHeight = theme.extension<KimappStyle>()?.baseComponentHeight;
 
     final widgetStyle = widget.style;
     final themeStyle = widget.themeStyleOf(context);
@@ -161,7 +162,7 @@ class _BaseButtonState extends State<BaseButton> {
               EdgeInsets.symmetric(
                 horizontal: theme.visualDensity.horizontal,
                 vertical: theme.visualDensity.vertical, // Since I applier default height for button
-              ).copyWith(),
+              ),
             )
             .clamp(EdgeInsets.zero, EdgeInsetsGeometry.infinity);
         final iconSize = resolve<double?>((style) => style?.iconSize);
@@ -195,7 +196,12 @@ class _BaseButtonState extends State<BaseButton> {
                 style: (resolvedTextStyle ?? const TextStyle())
                     .copyWith(color: resolvedForegroundColor),
                 textAlign: TextAlign.center,
-                child: widget.child,
+                child: kimappComponentHeight == null
+                    ? widget.child
+                    : Padding(
+                        padding: EdgeInsets.only(bottom: (kimappComponentHeight / 4) / 2),
+                        child: widget.child,
+                      ),
               ),
             ),
           ),
