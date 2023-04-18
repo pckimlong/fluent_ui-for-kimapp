@@ -95,10 +95,7 @@ abstract class BaseButton extends StatefulWidget {
   /// Buttons are disabled by default. To enable a button, set its [onPressed],
   /// [onLongPress], [onTapDown] or [onTapUp] properties to a non-null value.
   bool get enabled =>
-      onPressed != null ||
-      onLongPress != null ||
-      onTapDown != null ||
-      onTapUp != null;
+      onPressed != null || onLongPress != null || onTapDown != null || onTapUp != null;
 
   @override
   State<BaseButton> createState() => _BaseButtonState();
@@ -179,6 +176,7 @@ class _BaseButtonState extends State<BaseButton> {
             duration: FluentTheme.of(context).fasterAnimationDuration,
             curve: FluentTheme.of(context).animationCurve,
             height: theme.extension<KimappStyle>()!.baseComponentHeight,
+            alignment: Alignment.center,
             decoration: ShapeDecoration(
               shape: resolvedShape.copyWith(side: resolvedBorder),
               color: resolvedBackgroundColor,

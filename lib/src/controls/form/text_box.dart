@@ -853,39 +853,41 @@ class _TextBoxState extends State<TextBox>
       valueListenable: _effectiveController,
       child: editableText,
       builder: (BuildContext context, TextEditingValue? text, Widget? child) {
-        return Row(children: <Widget>[
-          // Insert a prefix at the front if the prefix visibility mode matches
-          // the current text state.
-          if (_showPrefixWidget(text!)) widget.prefix!,
-          // In the middle part, stack the placeholder on top of the main EditableText
-          // if needed.
-          Expanded(
-            child: Stack(
-              children: <Widget>[
-                if (widget.placeholder != null && text.text.isEmpty)
-                  SizedBox(
-                    width: double.infinity,
-                    child: Padding(
-                      padding: widget.padding,
-                      child: Text(
-                        widget.placeholder!,
-                        maxLines: widget.maxLines,
-                        overflow: placeholderStyle?.overflow ?? TextOverflow.ellipsis,
-                        style: placeholderStyle,
-                        textAlign: widget.textAlign,
+        return Row(
+          children: <Widget>[
+            // Insert a prefix at the front if the prefix visibility mode matches
+            // the current text state.
+            if (_showPrefixWidget(text!)) widget.prefix!,
+            // In the middle part, stack the placeholder on top of the main EditableText
+            // if needed.
+            Expanded(
+              child: Stack(
+                children: <Widget>[
+                  if (widget.placeholder != null && text.text.isEmpty)
+                    SizedBox(
+                      width: double.infinity,
+                      child: Padding(
+                        padding: widget.padding,
+                        child: Text(
+                          widget.placeholder!,
+                          maxLines: widget.maxLines,
+                          overflow: placeholderStyle?.overflow ?? TextOverflow.ellipsis,
+                          style: placeholderStyle,
+                          textAlign: widget.textAlign,
+                        ),
                       ),
                     ),
-                  ),
-                child!,
-              ],
+                  child!,
+                ],
+              ),
             ),
-          ),
-          // First add the explicit suffix if the suffix visibility mode matches.
-          if (_showSuffixWidget(text)) ...[
-            widget.suffix!,
-            const SizedBox(width: 4.0),
-          ]
-        ]);
+            // First add the explicit suffix if the suffix visibility mode matches.
+            if (_showSuffixWidget(text)) ...[
+              widget.suffix!,
+              const SizedBox(width: 4.0),
+            ]
+          ],
+        );
       },
     );
   }
@@ -979,6 +981,16 @@ class _TextBoxState extends State<TextBox>
             misspelledTextStyle: widget.spellCheckConfiguration!.misspelledTextStyle ??
                 TextBox.fluentMisspelledTextStyle)
         : const SpellCheckConfiguration.disabled();
+
+    final kimapp = themeData.extension<KimappStyle>();
+
+    final padding = widget.padding;
+    final kimappPadding = EdgeInsets.symmetric(
+      horizontal: padding.horizontal,
+      vertical: padding.vertical,
+    ).copyWith(
+      bottom: kimapp?.baseComponentHeight == null ? null : kimapp!.baseComponentHeight / 4,
+    );
 
     final Widget paddedEditable = Padding(
       padding: widget.padding,
@@ -1076,8 +1088,6 @@ class _TextBoxState extends State<TextBox>
           )
           .merge(widget.placeholderStyle);
     }
-
-    final kimapp = themeData.extension<KimappStyle>();
 
     final foregroundDecoration = BoxDecoration(
       border: Border(
