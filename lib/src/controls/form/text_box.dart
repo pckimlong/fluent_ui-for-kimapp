@@ -994,7 +994,7 @@ class _TextBoxState extends State<TextBox>
       kTextBoxPadding.end,
       kimapp?.baseComponentHeight == null
           ? kTextBoxPadding.bottom
-          : kimapp!.baseComponentHeight / 4,
+          : kimapp!.baseComponentHeight / 3.8,
     );
 
     final Widget paddedEditable = Padding(
