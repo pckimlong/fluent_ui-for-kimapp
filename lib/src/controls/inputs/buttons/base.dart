@@ -159,12 +159,7 @@ class _BaseButtonState extends State<BaseButton> {
             const RoundedRectangleBorder();
 
         final padding = resolvedPadding
-            .add(
-              EdgeInsets.symmetric(horizontal: theme.visualDensity.horizontal).copyWith(
-                bottom:
-                    kimapp?.baseComponentHeight == null ? null : kimapp!.baseComponentHeight / 4,
-              ),
-            )
+            .add(EdgeInsets.symmetric(horizontal: theme.visualDensity.horizontal))
             .clamp(EdgeInsets.zero, EdgeInsetsGeometry.infinity);
         final iconSize = resolve<double?>((style) => style?.iconSize);
         Widget result = PhysicalModel(

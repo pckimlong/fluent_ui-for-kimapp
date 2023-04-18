@@ -988,12 +988,13 @@ class _TextBoxState extends State<TextBox>
 
     final kimapp = themeData.extension<KimappStyle>();
 
-    final padding = widget.padding;
-    final kimappPadding = EdgeInsets.symmetric(
-      horizontal: padding.horizontal,
-      vertical: padding.vertical,
-    ).copyWith(
-      bottom: kimapp?.baseComponentHeight == null ? null : kimapp!.baseComponentHeight / 4,
+    final kimappPadding = EdgeInsets.fromLTRB(
+      kTextBoxPadding.start,
+      kTextBoxPadding.top,
+      kTextBoxPadding.end,
+      kimapp?.baseComponentHeight == null
+          ? kTextBoxPadding.bottom
+          : kimapp!.baseComponentHeight / 4,
     );
 
     final Widget paddedEditable = Padding(
