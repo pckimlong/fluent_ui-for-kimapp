@@ -116,6 +116,8 @@ class _BaseButtonState extends State<BaseButton> {
     assert(debugCheckHasFluentTheme(context));
     final theme = FluentTheme.of(context);
 
+    final kimapp = theme.extension<KimappStyle>();
+
     final widgetStyle = widget.style;
     final themeStyle = widget.themeStyleOf(context);
     final defaultStyle = widget.defaultStyleOf(context);
@@ -157,10 +159,12 @@ class _BaseButtonState extends State<BaseButton> {
             const RoundedRectangleBorder();
 
         final padding = resolvedPadding
-            .add(EdgeInsets.symmetric(
-              horizontal: theme.visualDensity.horizontal,
-              // vertical: theme.visualDensity.vertical, // Since I applier default height for button
-            ))
+            .add(
+              EdgeInsets.symmetric(horizontal: theme.visualDensity.horizontal).copyWith(
+                bottom:
+                    kimapp?.baseComponentHeight == null ? null : kimapp!.baseComponentHeight / 4,
+              ),
+            )
             .clamp(EdgeInsets.zero, EdgeInsetsGeometry.infinity);
         final iconSize = resolve<double?>((style) => style?.iconSize);
         Widget result = PhysicalModel(

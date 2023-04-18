@@ -841,7 +841,11 @@ class _TextBoxState extends State<TextBox>
   }
 
   Widget _addTextDependentAttachments(
-      Widget editableText, TextStyle textStyle, TextStyle? placeholderStyle) {
+    Widget editableText,
+    TextStyle textStyle,
+    TextStyle? placeholderStyle,
+    EdgeInsetsGeometry padding,
+  ) {
     // If there are no surrounding widgets, just return the core editable text
     // part.
     if (!_hasDecoration) {
@@ -867,7 +871,7 @@ class _TextBoxState extends State<TextBox>
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: widget.padding,
+                        padding: padding,
                         child: Text(
                           widget.placeholder!,
                           maxLines: widget.maxLines,
@@ -993,7 +997,7 @@ class _TextBoxState extends State<TextBox>
     );
 
     final Widget paddedEditable = Padding(
-      padding: widget.padding,
+      padding: kimappPadding,
       child: RepaintBoundary(
         child: UnmanagedRestorationScope(
           bucket: bucket,
@@ -1190,6 +1194,7 @@ class _TextBoxState extends State<TextBox>
                             paddedEditable,
                             textStyle,
                             placeholderStyle(states),
+                            kimappPadding,
                           ),
                         ),
                       ),
