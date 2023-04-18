@@ -161,7 +161,7 @@ class _BaseButtonState extends State<BaseButton> {
             .add(
               EdgeInsets.symmetric(
                 horizontal: theme.visualDensity.horizontal,
-                vertical: theme.visualDensity.vertical, // Since I applier default height for button
+                vertical: theme.visualDensity.vertical + 4,
               ),
             )
             .clamp(EdgeInsets.zero, EdgeInsetsGeometry.infinity);
