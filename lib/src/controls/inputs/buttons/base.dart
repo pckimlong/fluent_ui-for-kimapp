@@ -178,7 +178,7 @@ class _BaseButtonState extends State<BaseButton> {
           child: AnimatedContainer(
             duration: FluentTheme.of(context).fasterAnimationDuration,
             curve: FluentTheme.of(context).animationCurve,
-            height: theme.extension<KimappStyle>()!.baseComponentHeight,
+            height: theme.extension<KimappStyle>()!.baseComponentHeight * 0.96,
             alignment: Alignment.center,
             decoration: ShapeDecoration(
               shape: resolvedShape.copyWith(side: resolvedBorder),
@@ -196,12 +196,7 @@ class _BaseButtonState extends State<BaseButton> {
                 style: (resolvedTextStyle ?? const TextStyle())
                     .copyWith(color: resolvedForegroundColor),
                 textAlign: TextAlign.center,
-                child: kimappComponentHeight == null
-                    ? widget.child
-                    : Padding(
-                        padding: EdgeInsets.only(bottom: (kimappComponentHeight / 4) / 2),
-                        child: widget.child,
-                      ),
+                child: widget.child,
               ),
             ),
           ),
