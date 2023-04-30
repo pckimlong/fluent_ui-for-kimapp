@@ -67,7 +67,7 @@ class HomePage extends StatelessWidget {
                 onPressed: () {},
               ),
               const SizedBox(height: 8),
-              FilledButton(
+              ProgressFilledButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [

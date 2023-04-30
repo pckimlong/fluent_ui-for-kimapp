@@ -261,8 +261,10 @@ class ProgressFilledButton extends StatelessWidget {
                   .copyWith(color: isProgressing ? Colors.transparent : Colors.white, size: 14.0),
             ),
             child: DefaultTextStyle(
-              style: context.textTheme.body!
-                  .copyWith(color: isProgressing ? Colors.transparent : Colors.white),
+              style: context.textTheme.body!.copyWith(
+                color: isProgressing ? Colors.transparent : Colors.white,
+                height: 1.12,
+              ),
               child: child,
             ),
           ),
@@ -307,8 +309,10 @@ class ProgressButton extends StatelessWidget {
                   .copyWith(color: isProgressing ? Colors.transparent : null, size: 14),
             ),
             child: DefaultTextStyle(
-              style: context.textTheme.body!
-                  .copyWith(color: isProgressing ? Colors.transparent : null),
+              style: context.textTheme.body!.copyWith(
+                color: isProgressing ? Colors.transparent : null,
+                height: 1.12,
+              ),
               child: child,
             ),
           ),
