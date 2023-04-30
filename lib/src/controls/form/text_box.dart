@@ -1098,16 +1098,18 @@ class _TextBoxState extends State<TextBox>
       border: Border(
         bottom: BorderSide(
           color: _effectiveFocusNode.hasFocus
-              ? widget.highlightColor ??
-                  themeData.accentColor.defaultBrushFor(
-                    themeData.brightness,
-                  )
-              : !enabled
-                  ? Colors.transparent
-                  : widget.unfocusedColor ??
-                      (themeData.brightness.isLight
-                          ? const Color.fromRGBO(0, 0, 0, 0.45)
-                          : const Color.fromRGBO(255, 255, 255, 0.54)),
+              ? widget.highlightColor ?? themeData.accentColor.defaultBrushFor(themeData.brightness)
+              : Colors.transparent,
+
+          // Default color
+          // color: _effectiveFocusNode.hasFocus
+          //     ? widget.highlightColor ?? themeData.accentColor.defaultBrushFor(themeData.brightness)
+          //     : !enabled
+          //         ? Colors.transparent
+          //         : widget.unfocusedColor ??
+          //             (themeData.brightness.isLight
+          //                 ? const Color.fromRGBO(0, 0, 0, 0.45)
+          //                 : const Color.fromRGBO(255, 255, 255, 0.54)),
           width: _effectiveFocusNode.hasFocus ? 2 : kimapp?.borderWidth ?? 1,
         ),
       ),

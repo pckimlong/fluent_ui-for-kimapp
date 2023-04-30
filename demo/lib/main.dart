@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: kimappFluentTheme(
         componentHeight: 34,
-        borderRadius: 8,
+        borderRadius: 12,
       ),
       home: const HomePage(),
     );
