@@ -115,7 +115,6 @@ class _BaseButtonState extends State<BaseButton> {
   Widget build(BuildContext context) {
     assert(debugCheckHasFluentTheme(context));
     final theme = FluentTheme.of(context);
-    final kimappComponentHeight = theme.extension<KimappStyle>()?.baseComponentHeight;
 
     final widgetStyle = widget.style;
     final themeStyle = widget.themeStyleOf(context);
@@ -161,7 +160,7 @@ class _BaseButtonState extends State<BaseButton> {
             .add(
               EdgeInsets.symmetric(
                 horizontal: theme.visualDensity.horizontal,
-                vertical: theme.visualDensity.vertical + 4,
+                vertical: theme.visualDensity.vertical,
               ),
             )
             .clamp(EdgeInsets.zero, EdgeInsetsGeometry.infinity);

@@ -845,7 +845,6 @@ class _TextBoxState extends State<TextBox>
     Widget editableText,
     TextStyle textStyle,
     TextStyle? placeholderStyle,
-    EdgeInsetsGeometry padding,
   ) {
     // If there are no surrounding widgets, just return the core editable text
     // part.
@@ -872,7 +871,7 @@ class _TextBoxState extends State<TextBox>
                     SizedBox(
                       width: double.infinity,
                       child: Padding(
-                        padding: padding,
+                        padding: widget.padding,
                         child: Text(
                           widget.placeholder!,
                           maxLines: widget.maxLines,
@@ -989,17 +988,17 @@ class _TextBoxState extends State<TextBox>
 
     final kimapp = themeData.extension<KimappStyle>();
 
-    final kimappPadding = EdgeInsets.fromLTRB(
-      kTextBoxPadding.start,
-      kTextBoxPadding.top,
-      kTextBoxPadding.end,
-      kimapp?.baseComponentHeight == null
-          ? kTextBoxPadding.bottom
-          : kimapp!.baseComponentHeight / 3.8,
-    );
+    // final kimappPadding = EdgeInsets.fromLTRB(
+    //   kTextBoxPadding.start,
+    //   kTextBoxPadding.top,
+    //   kTextBoxPadding.end,
+    //   kimapp?.baseComponentHeight == null
+    //       ? kTextBoxPadding.bottom
+    //       : kimapp!.baseComponentHeight / 3.8,
+    // );
 
     final Widget paddedEditable = Padding(
-      padding: kimappPadding,
+      padding: kTextBoxPadding,
       child: RepaintBoundary(
         child: UnmanagedRestorationScope(
           bucket: bucket,
@@ -1188,7 +1187,8 @@ class _TextBoxState extends State<TextBox>
                     child: _selectionGestureDetectorBuilder.buildGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       child: Align(
-                        alignment: Alignment(-1.0, _textAlignVertical.y),
+                        alignment: const Alignment(-1.0, -0.3),
+                        // alignment: Alignment(-1.0, _textAlignVertical.y),
                         widthFactor: 1.0,
                         heightFactor: 1.0,
                         child: SmallIconButton(
@@ -1196,7 +1196,6 @@ class _TextBoxState extends State<TextBox>
                             paddedEditable,
                             textStyle,
                             placeholderStyle(states),
-                            kimappPadding,
                           ),
                         ),
                       ),
