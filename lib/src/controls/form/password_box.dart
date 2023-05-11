@@ -64,6 +64,9 @@ class PasswordBox extends StatefulWidget {
   ///    the user is done editing.
   final ValueChanged<String>? onSubmitted;
 
+  /// {@macro flutter.widgets.editableText.onChanged}
+  final ValueChanged<String>? onChanged;
+
   /// The reveal mode determine how the password is visible or obscured.
   final PasswordRevealMode revealMode;
 
@@ -110,6 +113,23 @@ class PasswordBox extends StatefulWidget {
   /// {@macro flutter.widgets.editableText.showCursor}
   final bool? showCursor;
 
+  /// {@macro flutter.widgets.editableText.readOnly}
+  final bool readOnly;
+
+  /// {@macro flutter.widgets.editableText.obscuringCharacter}
+  final String obscuringCharacter;
+
+  /// Controls the [BoxDecoration] of the box behind the text input.
+  ///
+  /// Defaults to having a rounded rectangle grey border and can be null to have
+  /// no box decoration.
+  final BoxDecoration? decoration;
+
+  /// Controls the [BoxDecoration] of the box in front of the text input.
+  ///
+  /// If [highlightColor] is provided, this must not be provided
+  final BoxDecoration? foregroundDecoration;
+
   /// The highlight color of the text box.
   ///
   /// If [foregroundDecoration] is provided, this must not be provided.
@@ -118,11 +138,24 @@ class PasswordBox extends StatefulWidget {
   ///  * [unfocusedColor], displayed when the field is not focused
   final Color? highlightColor;
 
-  /// {@macro flutter.widgets.editableText.readOnly}
-  final bool readOnly;
+  /// The unfocused color of the highlight border.
+  ///
+  /// See also:
+  ///   * [highlightColor], displayed when the field is focused
+  final Color? unfocusedColor;
 
-  /// {@macro flutter.widgets.editableText.obscuringCharacter}
-  final String obscuringCharacter;
+  /// The appearance of the keyboard.
+  ///
+  /// This setting is only honored on iOS devices.
+  ///
+  /// If null, defaults to the brightness of [FluentThemeData.brightness].
+  final Brightness? keyboardAppearance;
+
+  /// {@macro flutter.widgets.editableText.textAlign}
+  final TextAlign textAlign;
+
+  /// {@macro flutter.material.InputDecorator.textAlignVertical}
+  final TextAlignVertical? textAlignVertical;
 
   /// Creates a password box
   const PasswordBox({
@@ -130,6 +163,7 @@ class PasswordBox extends StatefulWidget {
     this.controller,
     this.onEditingComplete,
     this.onSubmitted,
+    this.onChanged,
     this.focusNode,
     this.enabled = true,
     this.placeholder,
@@ -142,9 +176,15 @@ class PasswordBox extends StatefulWidget {
     this.cursorHeight,
     this.cursorColor,
     this.showCursor,
-    this.highlightColor,
     this.readOnly = false,
     this.obscuringCharacter = '•',
+    this.decoration,
+    this.foregroundDecoration,
+    this.unfocusedColor,
+    this.highlightColor,
+    this.keyboardAppearance,
+    this.textAlign = TextAlign.start,
+    this.textAlignVertical,
   });
 
   @override
@@ -298,15 +338,134 @@ class _PasswordBoxState extends State<PasswordBox> {
           : null,
       onEditingComplete: widget.onEditingComplete,
       onSubmitted: widget.onSubmitted,
+      onChanged: widget.onChanged,
       autofocus: widget.autofocus,
       prefix: widget.leadingIcon,
       cursorWidth: widget.cursorWidth,
       cursorRadius: widget.cursorRadius,
       cursorHeight: widget.cursorHeight,
       cursorColor: widget.cursorColor,
-      highlightColor: widget.highlightColor,
+      showCursor: widget.showCursor,
       readOnly: widget.readOnly,
       obscuringCharacter: widget.obscuringCharacter,
+      decoration: widget.decoration,
+      foregroundDecoration: widget.foregroundDecoration,
+      highlightColor: widget.highlightColor,
+      unfocusedColor: widget.unfocusedColor,
+      keyboardType: _isVisible ? TextInputType.visiblePassword : null,
+      keyboardAppearance: widget.keyboardAppearance,
+      textAlign: widget.textAlign,
+      textAlignVertical: widget.textAlignVertical,
     );
   }
+}
+
+/// A [FormField] that contains a [PasswordBox].
+///
+/// This is a convenience widget that wraps a [PasswordBox] widget in a
+/// [FormField].
+///
+/// A [Form] ancestor is not required. The [Form] simply makes it easier to
+/// save, reset, or validate multiple fields at once. To use without a [Form],
+/// pass a `GlobalKey<FormFieldState>` (see [GlobalKey]) to the constructor and use
+/// [GlobalKey.currentState] to save or reset the form field.
+///
+/// When a [controller] is specified, its [TextEditingController.text]
+/// defines the [initialValue]. If this [FormField] is part of a scrolling
+/// container that lazily constructs its children, like a [ListView] or a
+/// [CustomScrollView], then a [controller] should be specified.
+/// The controller's lifetime should be managed by a stateful widget ancestor
+/// of the scrolling container.
+///
+/// If a [controller] is not specified, [initialValue] can be used to give
+/// the automatically generated controller an initial value.
+///
+/// {@macro flutter.material.textfield.wantKeepAlive}
+///
+/// Remember to call [TextEditingController.dispose] of the [TextEditingController]
+/// when it is no longer needed. This will ensure any resources used by the object
+/// are discarded.
+///
+/// See also:
+///
+///   * [PasswordBox], which is the underlying text field without the [Form]
+///    integration.
+///   * <https://docs.microsoft.com/en-us/windows/apps/design/controls/text-box>
+class PasswordFormBox extends ControllableFormBox {
+  /// Creates a [FormField] that contains a [PasswordBox].
+  ///
+  /// When a [controller] is specified, [initialValue] must be null (the
+  /// default). If [controller] is null, then a [TextEditingController]
+  /// will be constructed automatically and its `text` will be initialized
+  /// to [initialValue] or the empty string.
+  ///
+  /// For documentation about the various parameters, see the [PasswordBox] class
+  /// and [PasswordBox.new], the constructor.
+  PasswordFormBox({
+    super.key,
+    super.autovalidateMode,
+    super.enabled,
+    super.initialValue,
+    super.onSaved,
+    super.restorationId,
+    super.validator,
+    PasswordRevealMode revealMode = PasswordRevealMode.peek,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool readOnly = false,
+    bool? showCursor,
+    String obscuringCharacter = '•',
+    super.controller,
+    double cursorWidth = 2.0,
+    double? cursorHeight,
+    Radius cursorRadius = const Radius.circular(2.0),
+    Color? cursorColor,
+    VoidCallback? onEditingComplete,
+    ValueChanged<String>? onFieldSubmitted,
+    Color? highlightColor,
+    Color? errorHighlightColor,
+    String? placeholder,
+    TextStyle? placeholderStyle,
+    Widget? leadingIcon,
+  }) : super(builder: (FormFieldState<String> field) {
+          final theme = FluentTheme.of(field.context);
+          void onChangedHandler(String value) {
+            field.didChange(value);
+          }
+
+          return UnmanagedRestorationScope(
+            bucket: field.bucket,
+            child: FormRow(
+              padding: EdgeInsets.zero,
+              error: (field.errorText == null) ? null : Text(field.errorText!),
+              child: PasswordBox(
+                revealMode: revealMode,
+                focusNode: focusNode,
+                autofocus: autofocus,
+                readOnly: readOnly,
+                showCursor: showCursor,
+                obscuringCharacter: obscuringCharacter,
+                controller: controller,
+                cursorColor: cursorColor,
+                cursorHeight: cursorHeight,
+                cursorRadius: cursorRadius,
+                cursorWidth: cursorWidth,
+                enabled: enabled,
+                onEditingComplete: onEditingComplete,
+                onSubmitted: onFieldSubmitted,
+                onChanged: onChangedHandler,
+                highlightColor: (field.errorText == null)
+                    ? highlightColor
+                    : errorHighlightColor ??
+                        Colors.red.defaultBrushFor(theme.brightness),
+                placeholder: placeholder,
+                placeholderStyle: placeholderStyle,
+                leadingIcon: leadingIcon,
+              ),
+            ),
+          );
+        });
+
+  @override
+  FormFieldState<String> createState() => TextFormBoxState();
 }

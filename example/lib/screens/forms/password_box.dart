@@ -17,7 +17,7 @@ class _PasswordBoxPageState extends State<PasswordBoxPage> with PageMixin {
   Widget build(BuildContext context) {
     return ScaffoldPage.scrollable(
       header: PageHeader(
-        title: const Text('NumberBox'),
+        title: const Text('PasswordBox'),
         commandBar: ToggleSwitch(
           checked: disabled,
           onChanged: (v) {
@@ -33,41 +33,47 @@ class _PasswordBoxPageState extends State<PasswordBoxPage> with PageMixin {
           'show briefly the password in plain text.',
         ),
         subtitle(
-            content: const Text('A simple PasswordBox in peek mode (default)')),
+          content: const Text('A simple PasswordBox in peek mode (default)'),
+        ),
         CardHighlight(
           child: Row(children: [
             Expanded(
-                child: PasswordBox(
-              enabled: !disabled,
-            )),
+              child: PasswordBox(
+                enabled: !disabled,
+              ),
+            ),
           ]),
           codeSnippet: '''PasswordBox()''',
         ),
         subtitle(
-            content: const Text('A simple PasswordBox in peekAlways mode')),
+          content: const Text('A simple PasswordBox in peekAlways mode'),
+        ),
         CardHighlight(
           child: Row(children: [
             Expanded(
-                child: PasswordBox(
-              enabled: !disabled,
-              revealMode: PasswordRevealMode.peekAlways,
-            )),
+              child: PasswordBox(
+                enabled: !disabled,
+                revealMode: PasswordRevealMode.peekAlways,
+              ),
+            ),
           ]),
           codeSnippet: '''PasswordBox(
   revealMode: PasswordRevealMode.peekAlways,
 )''',
         ),
         subtitle(
-            content: const Text(
-                'A simple PasswordBox in visible (left) and hidden (right) mode')),
+          content: const Text(
+              'A simple PasswordBox in visible (left) and hidden (right) mode'),
+        ),
         CardHighlight(
           child: Row(children: [
             Expanded(
-                child: PasswordBox(
-              enabled: !disabled,
-              revealMode: PasswordRevealMode.visible,
-              placeholder: 'Visible Password',
-            )),
+              child: PasswordBox(
+                enabled: !disabled,
+                revealMode: PasswordRevealMode.visible,
+                placeholder: 'Visible Password',
+              ),
+            ),
             const SizedBox(width: 10.0),
             Expanded(
               child: PasswordBox(
@@ -112,6 +118,29 @@ PasswordBox(
           ]),
           codeSnippet: '''PasswordBox(
   revealMode: revealMode,
+)''',
+        ),
+        subtitle(content: const Text('PasswordFormBox')),
+        CardHighlight(
+          child: PasswordFormBox(
+            enabled: !disabled,
+            autovalidateMode: AutovalidateMode.always,
+            validator: (text) {
+              if (text == null) return null;
+              if (text.length < 8) return 'At least 8 characters';
+
+              return null;
+            },
+            revealMode: revealMode,
+          ),
+          codeSnippet: '''PasswordBox(
+  autovalidateMode: AutovalidateMode.always,
+  validator: (text) {
+    if (text == null) return null;
+    if (text.length < 8) return 'At least 8 characters';
+
+    return null;
+  },
 )''',
         ),
       ],

@@ -120,7 +120,7 @@ enum InfoBarSeverity {
 class InfoBar extends StatelessWidget {
   /// Creates an info bar.
   const InfoBar({
-    Key? key,
+    super.key,
     required this.title,
     this.content,
     this.action,
@@ -129,7 +129,7 @@ class InfoBar extends StatelessWidget {
     this.isLong = false,
     this.onClose,
     this.isIconVisible = true,
-  }) : super(key: key);
+  });
 
   /// The severity of this InfoBar.
   ///
@@ -180,14 +180,14 @@ class InfoBar extends StatelessWidget {
     final closeIcon = style.closeIcon;
     final title = Padding(
       padding: const EdgeInsetsDirectional.only(end: 6.0),
-      child: DefaultTextStyle(
+      child: DefaultTextStyle.merge(
         style: theme.typography.bodyStrong ?? const TextStyle(),
         child: this.title,
       ),
     );
     final content = () {
       if (this.content == null) return null;
-      return DefaultTextStyle(
+      return DefaultTextStyle.merge(
         style: theme.typography.body ?? const TextStyle(),
         child: this.content!,
       );
@@ -276,10 +276,10 @@ class InfoBarTheme extends InheritedTheme {
   /// Creates a info bar theme that controls the configurations for
   /// [InfoBar].
   const InfoBarTheme({
-    Key? key,
+    super.key,
     required this.data,
-    required Widget child,
-  }) : super(key: key, child: child);
+    required super.child,
+  });
 
   /// The properties for descendant [InfoBar] widgets.
   final InfoBarThemeData data;

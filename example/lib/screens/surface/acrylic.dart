@@ -24,7 +24,7 @@ InlineSpan _buildLabel(String label, String description) {
 }
 
 class AcrylicPage extends StatefulWidget {
-  const AcrylicPage({Key? key}) : super(key: key);
+  const AcrylicPage({super.key});
 
   @override
   State<AcrylicPage> createState() => _AcrylicPageState();
@@ -51,11 +51,11 @@ class _AcrylicPageState extends State<AcrylicPage> with PageMixin {
           'to app surfaces to add depth and help establish a visual hierarchy.',
         ),
         subtitle(content: const Text('Default background acrylic brush.')),
-        Card(
+        const Card(
           child: SizedBox(
             height: 300,
             width: 500,
-            child: Stack(children: const [
+            child: Stack(children: [
               _AcrylicChildren(),
               Positioned.fill(
                 child: Padding(
@@ -203,7 +203,7 @@ class _AcrylicPageState extends State<AcrylicPage> with PageMixin {
 }
 
 class _AcrylicChildren extends StatelessWidget {
-  const _AcrylicChildren({Key? key}) : super(key: key);
+  const _AcrylicChildren();
 
   @override
   Widget build(BuildContext context) {

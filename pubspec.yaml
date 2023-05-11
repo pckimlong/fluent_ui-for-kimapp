@@ -1,11 +1,11 @@
 name: fluent_ui
 description: Implements Windows UI in Flutter. Based on the official documentation
-version: 4.5.0
+version: 4.6.0
 homepage: https://github.com/bdlukaa/fluent_ui
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
-  flutter: ">=3.7.0"
+  sdk: ">=2.17.0 <=3.0.0"
+  flutter: ">=3.10.0"
 
 dependencies:
   flutter:
@@ -17,7 +17,7 @@ dependencies:
   intl: '>=0.17.0 <= 1.0.0'
 
   # Used on TabView
-  scroll_pos: ^0.3.0
+  scroll_pos: ^0.4.0
 
   # Used on icon generator
   recase: ^4.0.0

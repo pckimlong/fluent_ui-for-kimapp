@@ -1,9 +1,22 @@
-## [next]
+## 4.6.0 - Flutter 3.10
+
+- **BREAKING** Removed `FluentApp.useInheritedMediaQuery`
+- Upgrade the `scroll_pos` dependency (from @WinXaito) to version v0.4.0 ([#831](https://github.com/bdlukaa/fluent_ui/pull/831))
+- Added support for Urdu language ([#832](https://github.com/bdlukaa/fluent_ui/pull/832))
+
+
+## 4.5.1
 
 - Do not unfocus the auto suggest box on clear ([#816](https://github.com/bdlukaa/fluent_ui/issues/816))
 - Review all the inputs margins and inputs ([#799](https://github.com/bdlukaa/fluent_ui/pull/799))
 - `HyperlinkButton` now uses the correct color in dark mode ([#817](https://github.com/bdlukaa/fluent_ui/pull/817))
 - `DatePicker`, `TimePicker` and all other overlay widgets are now positioned correctly if there are multiple navigators ([#817](https://github.com/bdlukaa/fluent_ui/pull/817))
+- Added `PasswordFormBox` ([#811](https://github.com/bdlukaa/fluent_ui/issues/811))
+- `DateTime.startYear` and `DateTime.endYear` are now deprecated. Use `DateTime.startDate` and `DateTime.endDate` instead. ([#687](https://github.com/bdlukaa/fluent_ui/issues/687))
+- Added `.decoration`, `.foregroundDecoration`, `.highlightColor`, `.unfocusedColor`, `.keyboardAppearance`, `.textAlign`, `.textAlignVertical` to `PasswordBox` ([#820](https://github.com/bdlukaa/fluent_ui/issues/820))
+- Do not block text style inheritance in widgets ([#823](https://github.com/bdlukaa/fluent_ui/pull/823))
+- `NavigationView` now works correctly in top mode ([#821](https://github.com/bdlukaa/fluent_ui/pull/821))
+- Add `showDialog.dismissWithEsc` ([#826](https://github.com/bdlukaa/fluent_ui/issues/826))
 
 ## 4.5.0
 

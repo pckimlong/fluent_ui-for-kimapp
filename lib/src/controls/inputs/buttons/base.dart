@@ -16,7 +16,7 @@ import 'package:flutter/foundation.dart';
 ///   * [FilledButton], a colored button
 abstract class BaseButton extends StatefulWidget {
   const BaseButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.onLongPress,
     required this.onTapDown,
@@ -26,7 +26,7 @@ abstract class BaseButton extends StatefulWidget {
     required this.autofocus,
     required this.child,
     required this.focusable,
-  }) : super(key: key);
+  });
 
   /// Called when the button is tapped or otherwise activated.
   ///
@@ -192,8 +192,10 @@ class _BaseButtonState extends State<BaseButton> {
               child: AnimatedDefaultTextStyle(
                 duration: FluentTheme.of(context).fastAnimationDuration,
                 curve: FluentTheme.of(context).animationCurve,
-                style: (resolvedTextStyle ?? const TextStyle())
-                    .copyWith(color: resolvedForegroundColor),
+                style: DefaultTextStyle.of(context).style.merge(
+                      (resolvedTextStyle ?? const TextStyle())
+                          .copyWith(color: resolvedForegroundColor),
+                    ),
                 textAlign: TextAlign.center,
                 child: widget.child,
               ),

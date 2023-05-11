@@ -50,7 +50,7 @@ class FluentApp extends StatefulWidget {
   ///
   /// The boolean arguments, [routes], and [navigatorObservers], must not be null.
   const FluentApp({
-    Key? key,
+    super.key,
     this.navigatorKey,
     this.onGenerateRoute,
     this.onGenerateInitialRoutes,
@@ -80,17 +80,15 @@ class FluentApp extends StatefulWidget {
     this.themeMode,
     this.restorationScopeId,
     this.scrollBehavior = const FluentScrollBehavior(),
-    this.useInheritedMediaQuery = false,
   })  : routeInformationProvider = null,
         routeInformationParser = null,
         routerDelegate = null,
         backButtonDispatcher = null,
-        routerConfig = null,
-        super(key: key);
+        routerConfig = null;
 
   /// Creates a [FluentApp] that uses the [Router] instead of a [Navigator].
   FluentApp.router({
-    Key? key,
+    super.key,
     this.theme,
     this.darkTheme,
     this.themeMode,
@@ -117,7 +115,6 @@ class FluentApp extends StatefulWidget {
     this.actions,
     this.restorationScopeId,
     this.scrollBehavior = const FluentScrollBehavior(),
-    this.useInheritedMediaQuery = false,
   })  : assert(() {
           if (routerConfig != null) {
             assert(
@@ -146,8 +143,7 @@ class FluentApp extends StatefulWidget {
         onGenerateInitialRoutes = null,
         onUnknownRoute = null,
         routes = null,
-        initialRoute = null,
-        super(key: key);
+        initialRoute = null;
 
   /// Default visual properties, like colors fonts and shapes, for this app's
   /// fluent widgets.
@@ -370,9 +366,6 @@ class FluentApp extends StatefulWidget {
   ///    in a subtree.
   final ScrollBehavior scrollBehavior;
 
-  /// {@macro flutter.widgets.widgetsApp.useInheritedMediaQuery}
-  final bool useInheritedMediaQuery;
-
   @override
   State<FluentApp> createState() => _FluentAppState();
 }
@@ -502,7 +495,6 @@ class _FluentAppState extends State<FluentApp> {
         actions: widget.actions,
         restorationScopeId: widget.restorationScopeId,
         localizationsDelegates: _localizationsDelegates,
-        useInheritedMediaQuery: widget.useInheritedMediaQuery,
       );
     }
 
@@ -533,7 +525,6 @@ class _FluentAppState extends State<FluentApp> {
       actions: widget.actions,
       restorationScopeId: widget.restorationScopeId,
       localizationsDelegates: _localizationsDelegates,
-      useInheritedMediaQuery: widget.useInheritedMediaQuery,
       pageRouteBuilder: <T>(RouteSettings settings, WidgetBuilder builder) {
         return FluentPageRoute<T>(settings: settings, builder: builder);
       },

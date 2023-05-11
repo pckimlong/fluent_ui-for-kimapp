@@ -7,7 +7,9 @@ class NavigationPaneItem with Diagnosticable {
   /// See also:
   ///
   ///   * [PaneItem.build], which assigns
-  final GlobalKey itemKey = GlobalKey();
+  late final GlobalKey itemKey = GlobalKey(
+    debugLabel: 'NavigationPaneItem key; $runtimeType',
+  );
 
   final Key? key;
 
@@ -35,11 +37,11 @@ class PaneItem extends NavigationPaneItem {
   ///
   ///   * [body], which this is assigned to
   ///   * [_NavigationBody], which assigns this to every pane body
-  GlobalKey bodyKey = GlobalKey();
+  GlobalKey bodyKey = GlobalKey(debugLabel: 'PaneItem bodyKey');
 
   /// Creates a pane item.
   PaneItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.body,
     this.title,
@@ -52,7 +54,7 @@ class PaneItem extends NavigationPaneItem {
     this.selectedTileColor,
     this.onTap,
     this.enabled = true,
-  }) : super(key: key);
+  });
 
   /// The title used by this item. If the display mode is top
   /// or compact, this is shown as a tooltip. If it's open, this
@@ -483,15 +485,15 @@ class PaneItemHeader extends NavigationPaneItem {
     return KeyedSubtree(
       key: key,
       child: Container(
-        key: itemKey,
+        // key: itemKey,
         constraints: const BoxConstraints(minHeight: kPaneItemHeaderMinHeight),
         padding: (theme.iconPadding ?? EdgeInsets.zero).add(
           view.displayMode == PaneDisplayMode.top
               ? EdgeInsets.zero
               : theme.headerPadding ?? EdgeInsets.zero,
         ),
-        child: DefaultTextStyle(
-          style: theme.itemHeaderTextStyle ?? const TextStyle(),
+        child: DefaultTextStyle.merge(
+          style: theme.itemHeaderTextStyle,
           softWrap: false,
           maxLines: 1,
           overflow: TextOverflow.fade,
@@ -522,7 +524,7 @@ class PaneItemHeader extends NavigationPaneItem {
 ///   * [PaneItemExpander], which creates hierhical navigation
 class PaneItemAction extends PaneItem {
   PaneItemAction({
-    Key? key,
+    super.key,
     required super.icon,
     super.body = const SizedBox.shrink(),
     required VoidCallback super.onTap,
@@ -534,7 +536,7 @@ class PaneItemAction extends PaneItem {
     super.selectedTileColor,
     super.tileColor,
     super.trailing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(
@@ -637,7 +639,7 @@ class PaneItemExpander extends PaneItem {
 
 class _PaneItemExpander extends StatefulWidget {
   const _PaneItemExpander({
-    Key? key,
+    super.key,
     required this.item,
     required this.items,
     required this.displayMode,
@@ -645,7 +647,7 @@ class _PaneItemExpander extends StatefulWidget {
     required this.selected,
     required this.onPressed,
     required this.onItemPressed,
-  }) : super(key: key);
+  });
 
   final PaneItem item;
   final List<NavigationPaneItem> items;
@@ -749,9 +751,8 @@ class __PaneItemExpanderState extends State<_PaneItemExpander>
                         vertical: 8.0,
                       ),
                       margin: const EdgeInsetsDirectional.only(bottom: 4.0),
-                      child: DefaultTextStyle(
-                        style: navigationTheme.itemHeaderTextStyle ??
-                            const TextStyle(),
+                      child: DefaultTextStyle.merge(
+                        style: navigationTheme.itemHeaderTextStyle,
                         softWrap: false,
                         maxLines: 1,
                         overflow: TextOverflow.fade,
@@ -903,11 +904,10 @@ class __PaneItemExpanderState extends State<_PaneItemExpander>
 
 class _PaneItemExpanderMenuItem extends MenuFlyoutItemBase {
   const _PaneItemExpanderMenuItem({
-    Key? key,
     required this.item,
     required this.onPressed,
     required this.isSelected,
-  }) : super(key: key);
+  });
 
   final PaneItem item;
   final VoidCallback onPressed;

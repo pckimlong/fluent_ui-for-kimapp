@@ -4,11 +4,11 @@ import 'package:flutter_syntax_view/flutter_syntax_view.dart';
 
 class CardHighlight extends StatefulWidget {
   const CardHighlight({
-    Key? key,
+    super.key,
     this.backgroundColor,
     required this.child,
     required this.codeSnippet,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final String codeSnippet;
@@ -76,7 +76,7 @@ class _CardHighlightState extends State<CardHighlight>
                           color: theme.resources.textOnAccentFillColorPrimary,
                           size: 18,
                         )
-                      : Row(children: const [
+                      : const Row(children: [
                           Icon(FluentIcons.copy),
                           SizedBox(width: 6.0),
                           Text('Copy')

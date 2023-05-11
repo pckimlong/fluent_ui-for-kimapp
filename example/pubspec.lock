@@ -127,7 +127,11 @@ packages:
       path: ".."
       relative: true
     source: path
+<<<<<<< HEAD
     version: "4.5.0"
+=======
+    version: "4.6.0"
+>>>>>>> upstream/master
   flutter:
     dependency: "direct main"
     description: flutter
@@ -393,10 +397,10 @@ packages:
     dependency: transitive
     description:
       name: scroll_pos
-      sha256: cfca311b6b8d51538ff90e206fbe6ce3b36e7125ea6da4a40eb626c7f9f083b1
+      sha256: "4246bff3afc779d87cdf650a67d42d67ae71b23ff020d14592e6b89e28a7f9cc"
       url: "https://pub.dev"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -587,5 +591,10 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
+<<<<<<< HEAD
   dart: ">=3.0.0-0 <4.0.0"
   flutter: ">=3.7.0"
+=======
+  dart: ">=3.0.0-0 <=3.0.0"
+  flutter: ">=3.10.0"
+>>>>>>> upstream/master

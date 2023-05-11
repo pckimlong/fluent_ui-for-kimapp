@@ -98,7 +98,10 @@ class NavigationPane with Diagnosticable {
 
   final Key? key;
 
-  final GlobalKey paneKey = GlobalKey();
+  /// The key for the pane view
+  late final GlobalKey paneKey = GlobalKey(
+    debugLabel: 'NavigationPane paneKey#$displayMode',
+  );
 
   /// Use this property to customize how the pane will be displayed.
   /// [PaneDisplayMode.auto] is used by default.
@@ -538,7 +541,7 @@ class _TopNavigationPane extends StatefulWidget {
 }
 
 class _TopNavigationPaneState extends State<_TopNavigationPane> {
-  final overflowKey = GlobalKey();
+  final overflowKey = GlobalKey(debugLabel: 'TopNavigationPane overflowKey');
   final overflowController = FlyoutController();
 
   List<int> hiddenPaneItems = [];
@@ -558,6 +561,9 @@ class _TopNavigationPaneState extends State<_TopNavigationPane> {
 
   void _onPressed(PaneItem item) {
     widget.pane.changeTo(item);
+    if (overflowController.isOpen) {
+      Navigator.of(context).pop();
+    }
   }
 
   Widget _buildItem(
@@ -681,7 +687,6 @@ class _TopNavigationPaneState extends State<_TopNavigationPane> {
             overflowWidget: FlyoutTarget(
               key: overflowKey,
               controller: overflowController,
-              // placement: FlyoutPlacement.end,
               child: PaneItem(
                 icon: const Icon(FluentIcons.more),
                 body: const SizedBox.shrink(),
@@ -770,7 +775,7 @@ MenuFlyoutItemBase _buildMenuPaneItem(
     return _MenuFlyoutPaneItemExpander(
       item: item,
       onPressed: () => onPressed(item),
-      onItemPressed: (item) => onPressed(item),
+      onItemPressed: onPressed,
     );
   } else if (item is PaneItem) {
     return _MenuFlyoutPaneItem(
@@ -804,12 +809,11 @@ class _MenuFlyoutHeader extends MenuFlyoutItemBase {
 
 class _MenuFlyoutPaneItem extends MenuFlyoutItemBase {
   _MenuFlyoutPaneItem({
-    Key? key,
     required this.item,
     required this.onPressed,
     this.trailing = const SizedBox.shrink(),
     this.padding,
-  }) : super(key: key);
+  });
 
   final PaneItem item;
   final VoidCallback? onPressed;
@@ -820,12 +824,18 @@ class _MenuFlyoutPaneItem extends MenuFlyoutItemBase {
   Widget build(BuildContext context) {
     final size = Flyout.of(context).size;
     final theme = NavigationPaneTheme.of(context);
+    final fluentTheme = FluentTheme.of(context);
+    final view = InheritedNavigationView.of(context);
 
+    final selected = view.pane?.isSelected(item) ?? false;
     final titleText = item.title?.getProperty<String>() ?? '';
     final baseStyle = item.title?.getProperty<TextStyle>() ?? const TextStyle();
 
     return HoverButton(
-      onPressed: onPressed,
+      onPressed: () {
+        item.onTap?.call();
+        onPressed?.call();
+      },
       builder: (context, states) {
         var textStyle = () {
           var style = theme.unselectedTextStyle?.resolve(states);
@@ -865,6 +875,24 @@ class _MenuFlyoutPaneItem extends MenuFlyoutItemBase {
             transparentWhenDisabled: true,
           ),
           child: Row(mainAxisSize: MainAxisSize.min, children: [
+            Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: kDefaultListTilePadding.vertical,
+                ),
+                child: Container(
+                  height: 30 * 0.7,
+                  width: 3.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100.0),
+                    color: selected
+                        ? fluentTheme.accentColor
+                            .defaultBrushFor(fluentTheme.brightness)
+                        : Colors.transparent,
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: theme.iconPadding ?? EdgeInsets.zero,
               child: IconTheme.merge(
@@ -891,11 +919,10 @@ class _MenuFlyoutPaneItem extends MenuFlyoutItemBase {
 
 class _MenuFlyoutPaneItemExpander extends MenuFlyoutItemBase {
   _MenuFlyoutPaneItemExpander({
-    Key? key,
     required this.item,
     required this.onPressed,
     required this.onItemPressed,
-  }) : super(key: key);
+  });
 
   final PaneItemExpander item;
   final VoidCallback? onPressed;
@@ -1274,9 +1301,8 @@ class _OpenNavigationPaneState extends State<_OpenNavigationPane>
                             padding: const EdgeInsetsDirectional.only(
                               start: 8.0,
                             ),
-                            child: DefaultTextStyle(
-                              style: theme.itemHeaderTextStyle ??
-                                  const TextStyle(),
+                            child: DefaultTextStyle.merge(
+                              style: theme.itemHeaderTextStyle,
                               child: widget.pane.header!,
                             ),
                           ),

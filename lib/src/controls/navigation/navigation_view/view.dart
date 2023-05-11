@@ -42,7 +42,7 @@ typedef NavigationContentBuilder = Widget Function(
 class NavigationView extends StatefulWidget {
   /// Creates a navigation view.
   const NavigationView({
-    Key? key,
+    super.key,
     this.appBar,
     this.pane,
     this.content,
@@ -51,12 +51,11 @@ class NavigationView extends StatefulWidget {
     this.onOpenSearch,
     this.transitionBuilder,
     this.paneBodyBuilder,
-  })  : assert(
+  }) : assert(
           (pane != null && content == null) ||
               (pane == null && content != null),
           'Either pane or content must be provided',
-        ),
-        super(key: key);
+        );
 
   /// The app bar of the app.
   final NavigationAppBar? appBar;
@@ -274,7 +273,7 @@ class NavigationViewState extends State<NavigationView> {
           List.generate(widget.pane!.effectiveItems.length, (i) => i),
           List.generate(
             widget.pane!.effectiveItems.length,
-            (_) => GlobalKey(),
+            (i) => GlobalKey(debugLabel: 'NavigationView item key#$i'),
           ),
         ),
       );
@@ -866,10 +865,9 @@ class NavigationAppBar with Diagnosticable {
 
 class _NavigationAppBar extends StatelessWidget {
   const _NavigationAppBar({
-    Key? key,
     required this.appBar,
     required this.additionalLeading,
-  }) : super(key: key);
+  });
 
   final NavigationAppBar appBar;
   final Widget? additionalLeading;
@@ -895,9 +893,8 @@ class _NavigationAppBar extends StatelessWidget {
           padding: (theme.iconPadding ?? EdgeInsets.zero).add(
             const EdgeInsetsDirectional.only(start: 6.0),
           ),
-          child: DefaultTextStyle(
-            style:
-                FluentTheme.of(context).typography.caption ?? const TextStyle(),
+          child: DefaultTextStyle.merge(
+            style: FluentTheme.of(context).typography.caption,
             maxLines: 1,
             softWrap: false,
             child: appBar.title!,
