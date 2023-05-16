@@ -186,8 +186,7 @@ class PaneItem extends NavigationPaneItem {
                   softWrap: false,
                   textAlign: title?.getProperty<TextAlign>() ?? TextAlign.start,
                   textHeightBehavior: title?.getProperty<TextHeightBehavior>(),
-                  textWidthBasis: title?.getProperty<TextWidthBasis>() ??
-                      TextWidthBasis.parent,
+                  textWidthBasis: title?.getProperty<TextWidthBasis>() ?? TextWidthBasis.parent,
                 ),
               )
             : const SizedBox.shrink();
@@ -302,9 +301,8 @@ class PaneItem extends NavigationPaneItem {
             margin: const EdgeInsets.symmetric(horizontal: 6.0),
             decoration: BoxDecoration(
               color: () {
-                final tileColor = this.tileColor ??
-                    theme.tileColor ??
-                    kDefaultPaneItemColor(context, isTop);
+                final tileColor =
+                    this.tileColor ?? theme.tileColor ?? kDefaultPaneItemColor(context, isTop);
                 final newStates = states.toSet()..remove(ButtonStates.disabled);
                 if (selected && selectedTileColor != null) {
                   return selectedTileColor!.resolve(newStates);
@@ -312,9 +310,7 @@ class PaneItem extends NavigationPaneItem {
                 return tileColor.resolve(
                   selected
                       ? {
-                          states.isHovering
-                              ? ButtonStates.pressing
-                              : ButtonStates.hovering,
+                          states.isHovering ? ButtonStates.pressing : ButtonStates.hovering,
                         }
                       : newStates,
                 );
@@ -357,9 +353,7 @@ class PaneItem extends NavigationPaneItem {
       padding: const EdgeInsetsDirectional.only(bottom: 4.0),
       child: () {
         // If there is an indicator and the item is an effective item
-        if (maybeBody?.pane?.indicator != null &&
-            index != null &&
-            !index.isNegative) {
+        if (maybeBody?.pane?.indicator != null && index != null && !index.isNegative) {
           final key = PaneItemKeys.of(index, context);
 
           return Stack(children: [
@@ -497,9 +491,7 @@ class PaneItemHeader extends NavigationPaneItem {
           softWrap: false,
           maxLines: 1,
           overflow: TextOverflow.fade,
-          textAlign: view.displayMode == PaneDisplayMode.top
-              ? TextAlign.center
-              : TextAlign.left,
+          textAlign: view.displayMode == PaneDisplayMode.top ? TextAlign.center : TextAlign.left,
           child: header,
         ),
       ),
@@ -663,8 +655,7 @@ class _PaneItemExpander extends StatefulWidget {
   State<_PaneItemExpander> createState() => __PaneItemExpanderState();
 }
 
-class __PaneItemExpanderState extends State<_PaneItemExpander>
-    with SingleTickerProviderStateMixin {
+class __PaneItemExpanderState extends State<_PaneItemExpander> with SingleTickerProviderStateMixin {
   final flyoutController = FlyoutController();
   bool get useFlyout {
     return widget.displayMode != PaneDisplayMode.open;
@@ -690,8 +681,7 @@ class __PaneItemExpanderState extends State<_PaneItemExpander>
     }
 
     flyoutController.addListener(() {
-      if (_open && !flyoutController.isOpen ||
-          !_open && flyoutController.isOpen) {
+      if (_open && !flyoutController.isOpen || !_open && flyoutController.isOpen) {
         toggleOpen(doFlyout: false);
       }
     });
@@ -959,7 +949,7 @@ class _PaneItemExpanderMenuItem extends MenuFlyoutItemBase {
   }
 }
 
-class _PaneItemExpanderItem extends LinkedListEntry<_PaneItemExpanderItem> {
+base class _PaneItemExpanderItem extends LinkedListEntry<_PaneItemExpanderItem> {
   final PaneItem parent;
   final NavigationPaneItem expanderItem;
   final List<NavigationPaneItem> siblings;
@@ -1005,8 +995,7 @@ extension ItemExtension on Widget {
               TextSpan(
                 text: title.data ?? '',
                 style:
-                    title.getProperty<TextStyle>()?.merge(def as TextStyle?) ??
-                        def as TextStyle?,
+                    title.getProperty<TextStyle>()?.merge(def as TextStyle?) ?? def as TextStyle?,
               )) as T?;
         case TextStyle:
           return title.style as T?;
