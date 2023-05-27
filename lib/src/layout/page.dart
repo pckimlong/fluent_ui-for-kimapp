@@ -135,9 +135,7 @@ class _ScaffoldPageState extends State<ScaffoldPage> {
       bucket: _bucket,
       child: Padding(
         padding: EdgeInsetsDirectional.only(
-          bottom: widget.resizeToAvoidBottomInset
-              ? mediaQuery.viewInsets.bottom
-              : 0.0,
+          bottom: widget.resizeToAvoidBottomInset ? mediaQuery.viewInsets.bottom : 0.0,
         ),
         child: Column(children: [
           Expanded(
@@ -180,6 +178,7 @@ class PageHeader extends StatelessWidget {
     this.title,
     this.commandBar,
     this.padding,
+    this.bottomPadding,
   });
 
   /// The widget displayed before the [title]
@@ -202,13 +201,15 @@ class PageHeader extends StatelessWidget {
   /// The horizontal padding applied to both sides of the page
   final double? padding;
 
+  // Kimapp
+  final double? bottomPadding;
+
   /// Gets the horizontal padding applied to the header based on the screen width
   static double horizontalPadding(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     final screenWidth = MediaQuery.of(context).size.width;
     final isSmallScreen = screenWidth < 640.0;
-    final horizontalPadding =
-        isSmallScreen ? 12.0 : kPageDefaultVerticalPadding;
+    final horizontalPadding = isSmallScreen ? 12.0 : kPageDefaultVerticalPadding;
     return horizontalPadding;
   }
 
@@ -221,7 +222,7 @@ class PageHeader extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsetsDirectional.only(
-        bottom: 18.0,
+        bottom: bottomPadding ?? 18.0,
         start: leading != null ? 0 : horizontalPadding,
       ),
       child: Row(children: [
