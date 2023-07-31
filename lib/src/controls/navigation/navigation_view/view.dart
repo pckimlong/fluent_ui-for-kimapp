@@ -306,26 +306,18 @@ class NavigationViewState extends State<NavigationView> {
     assert(debugCheckHasFluentLocalizations(context));
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasDirectionality(context));
+    assert(
+      widget.content != null || widget.pane != null,
+      'Either pane or '
+      'content must be provided',
+    );
 
-    final brightness = FluentTheme.of(context).brightness;
     final theme = NavigationPaneTheme.of(context);
     final localizations = FluentLocalizations.of(context);
-    final mediaQuery = MediaQuery.of(context);
     final EdgeInsetsGeometry appBarPadding = EdgeInsetsDirectional.only(
       top: widget.appBar?.finalHeight(context) ?? 0.0,
     );
     final direction = Directionality.of(context);
-
-    Color? overlayBackgroundColor() {
-      if (theme.backgroundColor == null) {
-        if (brightness.isDark) {
-          return const Color(0xFF202020);
-        } else {
-          return const Color(0xFFf7f7f7);
-        }
-      }
-      return theme.backgroundColor;
-    }
 
     Widget? paneNavigationButton() {
       final minimalLeading = PaneItem(
@@ -364,7 +356,7 @@ class NavigationViewState extends State<NavigationView> {
         /// (641px to 1007px).
         /// - Only a menu button (minimal) on small window widths (640px or less).
         var width = consts.biggest.width;
-        if (width.isInfinite) width = mediaQuery.size.width;
+        if (width.isInfinite) width = MediaQuery.sizeOf(context).width;
 
         if (width <= 640) {
           _autoDisplayMode = PaneDisplayMode.minimal;
@@ -569,7 +561,7 @@ class NavigationViewState extends State<NavigationView> {
                         return ClipRect(
                           child: Mica(
                             key: _overlayKey,
-                            backgroundColor: overlayBackgroundColor(),
+                            backgroundColor: theme.overlayBackgroundColor,
                             elevation: 10.0,
                             child: Container(
                               decoration: BoxDecoration(
@@ -597,7 +589,7 @@ class NavigationViewState extends State<NavigationView> {
                       } else {
                         return Mica(
                           key: _overlayKey,
-                          backgroundColor: overlayBackgroundColor(),
+                          backgroundColor: theme.overlayBackgroundColor,
                           child: Padding(
                             padding: EdgeInsetsDirectional.only(
                               top: appBarPadding.resolve(direction).top,
@@ -633,7 +625,7 @@ class NavigationViewState extends State<NavigationView> {
                               context,
                               identifier: 'openModeOpen',
                             ) as bool? ??
-                            false,
+                            mounted,
                       ),
                     ),
                     Expanded(child: content),
@@ -642,7 +634,19 @@ class NavigationViewState extends State<NavigationView> {
               ]);
               break;
             case PaneDisplayMode.minimal:
+              var openSize =
+                  pane.size?.openPaneWidth ?? kOpenNavigationPaneWidth;
+
               paneResult = Stack(children: [
+                PositionedDirectional(
+                  top: 0,
+                  start: 0,
+                  end: 0,
+                  height: widget.appBar?.finalHeight(context) ?? 0.0,
+                  child: ColoredBox(
+                    color: FluentTheme.of(context).scaffoldBackgroundColor,
+                  ),
+                ),
                 PositionedDirectional(
                   top: widget.appBar?.finalHeight(context) ?? 0.0,
                   start: 0.0,
@@ -666,31 +670,28 @@ class NavigationViewState extends State<NavigationView> {
                   key: _overlayKey,
                   duration: theme.animationDuration ?? Duration.zero,
                   curve: theme.animationCurve ?? Curves.linear,
-                  start: minimalPaneOpen ? 0.0 : -kOpenNavigationPaneWidth,
-                  width: kOpenNavigationPaneWidth,
-                  height: mediaQuery.size.height,
+                  start: minimalPaneOpen ? 0.0 : -openSize,
+                  width: openSize,
+                  height: MediaQuery.sizeOf(context).height,
                   child: PaneScrollConfiguration(
-                    child: ColoredBox(
-                      color: Colors.black,
-                      child: Mica(
-                        backgroundColor: overlayBackgroundColor(),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: const Color(0xFF6c6c6c),
-                              width: 0.15,
-                            ),
-                            borderRadius: BorderRadius.circular(8.0),
+                    child: Mica(
+                      backgroundColor: theme.overlayBackgroundColor,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: const Color(0xFF6c6c6c),
+                            width: 0.15,
                           ),
-                          margin: const EdgeInsets.symmetric(vertical: 1.0),
-                          padding: appBarPadding,
-                          child: _OpenNavigationPane(
-                            theme: theme,
-                            pane: pane,
-                            paneKey: _panelKey,
-                            listKey: _listKey,
-                            onItemSelected: () => minimalPaneOpen = false,
-                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        margin: const EdgeInsets.symmetric(vertical: 1.0),
+                        padding: appBarPadding,
+                        child: _OpenNavigationPane(
+                          theme: theme,
+                          pane: pane,
+                          paneKey: _panelKey,
+                          listKey: _listKey,
+                          onItemSelected: () => minimalPaneOpen = false,
                         ),
                       ),
                     ),
@@ -709,8 +710,9 @@ class NavigationViewState extends State<NavigationView> {
           Expanded(child: widget.content!),
         ]);
       } else {
-        throw 'Either pane or content must be provided';
+        return const SizedBox.shrink();
       }
+
       return Mica(
         backgroundColor: theme.backgroundColor,
         child: InheritedNavigationView(
@@ -732,7 +734,11 @@ class NavigationViewState extends State<NavigationView> {
         child: ScrollConfiguration(
           behavior: widget.pane?.scrollBehavior ??
               const NavigationViewScrollBehavior(),
-          child: child,
+          child: MediaQuery.removePadding(
+            context: context,
+            removeTop: widget.appBar != null,
+            child: child,
+          ),
         ),
       );
     });
@@ -854,11 +860,12 @@ class NavigationAppBar with Diagnosticable {
     });
   }
 
+  /// Determines the height of this app bar based on its height and the top
+  /// padding from the system.
+  @visibleForTesting
   double finalHeight(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
-    final mediaQuery = MediaQuery.of(context);
-    final topPadding = mediaQuery.viewPadding.top;
-
+    final topPadding = MediaQuery.paddingOf(context).top;
     return height + topPadding;
   }
 }
@@ -876,8 +883,6 @@ class _NavigationAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasFluentLocalizations(context));
-
-    final mediaQuery = MediaQuery.of(context);
 
     final displayMode = InheritedNavigationView.maybeOf(context)?.displayMode ??
         PaneDisplayMode.top;
@@ -907,11 +912,14 @@ class _NavigationAppBar extends StatelessWidget {
     late Widget result;
     switch (displayMode) {
       case PaneDisplayMode.top:
-        result = Row(children: [
-          leading,
-          if (additionalLeading != null) additionalLeading!,
-          title,
-          if (appBar.actions != null) Expanded(child: appBar.actions!)
+        result = Stack(children: [
+          Row(children: [
+            leading,
+            if (additionalLeading != null) additionalLeading!,
+            Expanded(child: title),
+          ]),
+          if (appBar.actions != null)
+            PositionedDirectional(end: 0, child: appBar.actions!),
         ]);
         break;
       case PaneDisplayMode.minimal:
@@ -942,7 +950,7 @@ class _NavigationAppBar extends StatelessWidget {
       default:
         return const SizedBox.shrink();
     }
-    final topPadding = mediaQuery.viewPadding.top;
+    final topPadding = MediaQuery.paddingOf(context).top;
 
     return Container(
       color: appBar.backgroundColor,

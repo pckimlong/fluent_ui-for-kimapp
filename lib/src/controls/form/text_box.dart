@@ -82,6 +82,8 @@ class _TextBoxSelectionGestureDetectorBuilder extends TextSelectionGestureDetect
 ///
 /// {@macro flutter.widgets.editableText.showCaretOnScreen}
 ///
+/// {@macro flutter.widgets.editableText.accessibility}
+///
 /// See also:
 ///
 ///  * [EditableText], which is the raw text editing control at the heart of a
@@ -973,8 +975,8 @@ class _TextBoxState extends State<TextBox>
         DefaultSelectionStyle.of(context).cursorColor ??
         themeData.inactiveColor;
 
-    final selectionColor = DefaultSelectionStyle.of(context).selectionColor ??
-        themeData.accentColor.defaultBrushFor(themeData.brightness).withOpacity(0.2);
+    final selectionColor =
+        DefaultSelectionStyle.of(context).selectionColor ?? themeData.accentColor.normal;
 
     // Set configuration as disabled if not otherwise specified. If specified,
     // ensure that configuration uses Fluent text style for misspelled words

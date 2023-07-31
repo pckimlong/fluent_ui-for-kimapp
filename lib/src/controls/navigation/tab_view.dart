@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:fluent_ui/fluent_ui.dart';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/rendering.dart';
@@ -73,8 +72,6 @@ class TabView extends StatefulWidget {
     this.header,
     this.footer,
     this.closeDelayDuration = const Duration(milliseconds: 400),
-    @Deprecated('This property is no longer used and will be removed in the next major release.')
-        this.wheelScroll = false,
   });
 
   /// The index of the tab to be displayed
@@ -127,10 +124,6 @@ class TabView extends StatefulWidget {
   ///
   /// If null, a [ScrollPosController] is created internally.
   final ScrollPosController? scrollController;
-
-  @Deprecated('This property is no longer used and will be removed in the'
-      ' next major release.')
-  final bool wheelScroll;
 
   /// Indicates the close button visibility mode
   final CloseButtonVisibilityMode closeButtonVisibility;
@@ -362,7 +355,9 @@ class _TabViewState extends State<TabView> {
         style: ButtonStyle(
           foregroundColor: ButtonState.resolveWith((states) {
             if (states.isDisabled || states.isNone) {
-              return FluentTheme.of(context).disabledColor;
+              return FluentTheme.of(context)
+                  .resources
+                  .controlAltFillColorDisabled;
             } else {
               return FluentTheme.of(context).inactiveColor;
             }
@@ -683,8 +678,6 @@ class __TabBodyState extends State<_TabBody> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    MediaQuery.of(context);
-
     _pageController ??= PageController(initialPage: widget.index);
   }
 
@@ -723,7 +716,7 @@ class __TabBodyState extends State<_TabBody> {
 }
 
 /// Represents a single tab within a [TabView].
-class Tab {
+class Tab with Diagnosticable {
   final _tabKey = GlobalKey<__TabState>(debugLabel: 'Tab key');
 
   /// Creates a tab.
@@ -735,6 +728,7 @@ class Tab {
     this.closeIcon = FluentIcons.chrome_close,
     this.onClosed,
     this.semanticLabel,
+    this.disabled = false,
   });
 
   final Key? key;
@@ -763,6 +757,22 @@ class Tab {
 
   /// The body of the view attached to this tab
   final Widget body;
+
+  /// Whether the tab is disabled or not. If true, the tab will be greyed out
+  final bool disabled;
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(FlagProperty(
+        'disabled',
+        value: disabled,
+        defaultValue: false,
+        ifFalse: 'enabled',
+      ))
+      ..add(IconDataProperty('closeIcon', closeIcon));
+  }
 }
 
 class _Tab extends StatefulWidget {
@@ -840,39 +850,35 @@ class __TabState extends State<_Tab>
     return HoverButton(
       key: widget.tab.key,
       semanticLabel: widget.tab.semanticLabel ?? text,
-      onPressed: widget.onPressed,
+      onPressed: widget.tab.disabled ? null : widget.onPressed,
       builder: (context, states) {
-        /// https://github.com/microsoft/microsoft-ui-xaml/blob/main/dev/TreeView/TreeView_themeresources.xaml#L19-L26
+        // https://github.com/microsoft/microsoft-ui-xaml/blob/main/dev/TabView/TabView_themeresources.xaml#L15-L19
         final foregroundColor = ButtonState.resolveWith<Color>((states) {
-          if (states.isPressing) {
+          if (widget.selected) {
+            return res.textFillColorPrimary;
+          } else if (states.isPressing) {
             return res.textFillColorSecondary;
           } else if (states.isHovering) {
             return res.textFillColorPrimary;
           } else if (states.isDisabled) {
             return res.textFillColorDisabled;
           } else {
-            return widget.selected
-                ? res.textFillColorPrimary
-                : res.textFillColorSecondary;
+            return res.textFillColorSecondary;
           }
         }).resolve(states);
 
-        /// https://github.com/microsoft/microsoft-ui-xaml/blob/main/dev/TreeView/TreeView_themeresources.xaml#L10-L17
+        /// https://github.com/microsoft/microsoft-ui-xaml/blob/main/dev/TabView/TabView_themeresources.xaml#L10-L14
         final backgroundColor = ButtonState.resolveWith<Color>((states) {
-          if (states.isPressing) {
-            return widget.selected
-                ? res.subtleFillColorSecondary
-                : res.subtleFillColorTertiary;
+          if (widget.selected) {
+            return res.solidBackgroundFillColorTertiary;
+          } else if (states.isPressing) {
+            return res.layerOnMicaBaseAltFillColorDefault;
           } else if (states.isHovering) {
-            return widget.selected
-                ? res.subtleFillColorTertiary
-                : res.subtleFillColorSecondary;
+            return res.layerOnMicaBaseAltFillColorSecondary;
           } else if (states.isDisabled) {
-            return res.subtleFillColorDisabled;
+            return res.layerOnMicaBaseAltFillColorTransparent;
           } else {
-            return widget.selected
-                ? res.subtleFillColorSecondary
-                : res.subtleFillColorTransparent;
+            return res.layerOnMicaBaseAltFillColorTransparent;
           }
         }).resolve(states);
 
@@ -891,12 +897,19 @@ class __TabState extends State<_Tab>
                         maxWidth: _kMaxTileWidth,
                         minHeight: 28.0,
                       ),
-            padding: const EdgeInsetsDirectional.only(
-              start: 8,
-              top: 3,
-              end: 4,
-              bottom: 3,
-            ),
+            padding: widget.selected
+                ? const EdgeInsetsDirectional.only(
+                    start: 9,
+                    top: 3,
+                    end: 5,
+                    bottom: 4,
+                  )
+                : const EdgeInsetsDirectional.only(
+                    start: 8,
+                    top: 3,
+                    end: 4,
+                    bottom: 3,
+                  ),
             decoration: BoxDecoration(
               borderRadius: borderRadius,
 
@@ -975,6 +988,7 @@ class __TabState extends State<_Tab>
               if (widget.reorderIndex != null) {
                 return ReorderableDragStartListener(
                   index: widget.reorderIndex!,
+                  enabled: !widget.tab.disabled,
                   child: result,
                 );
               }
