@@ -109,6 +109,10 @@ extension BuildContextX on BuildContext {
   EdgeInsets get keyboardPadding => EdgeInsets.only(bottom: MediaQuery.of(this).viewInsets.bottom);
 }
 
+extension FluentThemeDataX on FluentThemeData {
+  Color get disabledColor => resources.textFillColorDisabled;
+}
+
 // custom widget
 
 class ResponsiveBox extends StatelessWidget {
