@@ -110,7 +110,8 @@ extension BuildContextX on BuildContext {
 }
 
 extension FluentThemeDataX on FluentThemeData {
-  Color get disabledColor => resources.textFillColorDisabled;
+  Color get disabledColor => resources.controlFillColorDisabled;
+  Color get borderInputColor => resources.controlStrokeColorDefault;
 }
 
 // custom widget
