@@ -110,7 +110,7 @@ extension BuildContextX on BuildContext {
 }
 
 extension FluentThemeDataX on FluentThemeData {
-  Color get disabledColor => resources.controlFillColorDisabled;
+  Color get disabledColor => resources.accentTextFillColorDisabled;
   Color get borderInputColor => resources.controlStrokeColorDefault;
 }
 
