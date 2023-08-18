@@ -95,7 +95,10 @@ class NavigationView extends StatefulWidget {
   /// The body content is not clipped on when the display mode is [PaneDisplayMode.minimal]
   final ShapeBorder? contentShape;
 
-  /// Called when the search button is tapped
+  /// Called when the search button is tapped.
+  ///
+  /// This callback is invoked when [NavigationPane.autoSuggestBoxReplacement]
+  /// is tapped.
   final VoidCallback? onOpenSearch;
 
   /// The transition builder.
@@ -120,8 +123,23 @@ class NavigationView extends StatefulWidget {
   ///  * <https://docs.microsoft.com/en-us/windows/apps/design/motion/page-transitions>
   final AnimatedSwitcherTransitionBuilder? transitionBuilder;
 
+  /// Gets the current navigation view state.
+  ///
+  /// This is the same as using a `GlobalKey<NavigationViewState>`
   static NavigationViewState of(BuildContext context) {
-    return context.findAncestorStateOfType<NavigationViewState>()!;
+    return maybeOf(context)!;
+  }
+
+  static NavigationViewState? maybeOf(BuildContext context) {
+    return context.findAncestorStateOfType<NavigationViewState>();
+  }
+
+  /// Get useful info about the current navigation view.
+  ///
+  /// As a normal user, you will rarely need this information.
+  static _InheritedNavigationView dataOf(BuildContext context) {
+    return context
+        .dependOnInheritedWidgetOfExactType<_InheritedNavigationView>()!;
   }
 
   @override
@@ -186,7 +204,22 @@ class NavigationViewState extends State<NavigationView> {
     return false;
   }
 
-  int _oldIndex = 0;
+  set compactOverlayOpen(bool value) {
+    if (value == _compactOverlayOpen) return;
+    if ([PaneDisplayMode.open, PaneDisplayMode.compact].contains(displayMode)) {
+      setState(() {
+        _compactOverlayOpen = value;
+        _isTransitioning = true;
+      });
+      PageStorage.of(context).writeState(
+        context,
+        _compactOverlayOpen,
+        identifier: 'compactOverlayOpen',
+      );
+    }
+  }
+
+  int _previousItemIndex = 0;
 
   PaneDisplayMode? _autoDisplayMode;
 
@@ -231,7 +264,7 @@ class NavigationViewState extends State<NavigationView> {
     }
 
     if (oldWidget.pane?.selected != widget.pane?.selected) {
-      _oldIndex = oldWidget.pane?.selected ?? -1;
+      _previousItemIndex = oldWidget.pane?.selected ?? -1;
 
       final item = widget.pane?.selected == null
           ? null
@@ -292,12 +325,21 @@ class NavigationViewState extends State<NavigationView> {
 
   /// Toggles the current compact mode
   void toggleCompactOpenMode() {
-    setState(() => _compactOverlayOpen = !_compactOverlayOpen);
-    PageStorage.of(context).writeState(
-      context,
-      _compactOverlayOpen,
-      identifier: 'compactOverlayOpen',
-    );
+    compactOverlayOpen = !compactOverlayOpen;
+  }
+
+  /// Whether the navigation pane is currently transitioning
+  ///
+  /// This is useful to prevent the user from interacting with the pane and to
+  /// hide any other pane item features while the pane is animating, such as
+  /// the `infoBadge`
+  ///
+  /// This is always false when display mode is top
+  bool _isTransitioning = false;
+
+  void _animationEndCallback([bool notify = true]) {
+    _isTransitioning = false;
+    if (mounted && notify) setState(() {});
   }
 
   @override
@@ -308,8 +350,7 @@ class NavigationViewState extends State<NavigationView> {
     assert(debugCheckHasDirectionality(context));
     assert(
       widget.content != null || widget.pane != null,
-      'Either pane or '
-      'content must be provided',
+      'Either pane or content must be provided',
     );
 
     final theme = NavigationPaneTheme.of(context);
@@ -333,6 +374,7 @@ class NavigationViewState extends State<NavigationView> {
         false,
         () async {
           minimalPaneOpen = !minimalPaneOpen;
+          _isTransitioning = true;
         },
         displayMode: PaneDisplayMode.compact,
       );
@@ -455,6 +497,7 @@ class NavigationViewState extends State<NavigationView> {
           }
           switch (displayMode) {
             case PaneDisplayMode.top:
+              _isTransitioning = false;
               paneResult = Column(children: [
                 appBar,
                 PaneScrollConfiguration(
@@ -483,12 +526,6 @@ class NavigationViewState extends State<NavigationView> {
               final openedWithoutOverlay =
                   _compactOverlayOpen && consts.maxWidth / 2.5 > openSize;
 
-              // print(
-              //     'open: $_compactOverlayOpen - without overlay:$openedWithoutOverlay - storage: ${PageStorage.of(context)?.readState(
-              //   context,
-              //   identifier: 'compactOverlayOpen',
-              // )}');
-
               if (noOverlayRequired) {
                 paneResult = Column(children: [
                   appBar,
@@ -510,6 +547,7 @@ class NavigationViewState extends State<NavigationView> {
                                   listKey: _listKey,
                                   onToggle: toggleCompactOpenMode,
                                   initiallyOpen: true,
+                                  onAnimationEnd: _animationEndCallback,
                                 ),
                               ),
                             );
@@ -522,6 +560,7 @@ class NavigationViewState extends State<NavigationView> {
                                 listKey: _listKey,
                                 onToggle: toggleCompactOpenMode,
                                 onOpenSearch: widget.onOpenSearch,
+                                onAnimationEnd: _animationEndCallback,
                               ),
                             );
                           }
@@ -582,6 +621,7 @@ class NavigationViewState extends State<NavigationView> {
                                 listKey: _listKey,
                                 onToggle: toggleCompactOpenMode,
                                 onItemSelected: toggleCompactOpenMode,
+                                onAnimationEnd: _animationEndCallback,
                               ),
                             ),
                           ),
@@ -589,7 +629,7 @@ class NavigationViewState extends State<NavigationView> {
                       } else {
                         return Mica(
                           key: _overlayKey,
-                          backgroundColor: theme.overlayBackgroundColor,
+                          backgroundColor: theme.backgroundColor,
                           child: Padding(
                             padding: EdgeInsetsDirectional.only(
                               top: appBarPadding.resolve(direction).top,
@@ -600,6 +640,7 @@ class NavigationViewState extends State<NavigationView> {
                               listKey: _listKey,
                               onToggle: toggleCompactOpenMode,
                               onOpenSearch: widget.onOpenSearch,
+                              onAnimationEnd: _animationEndCallback,
                             ),
                           ),
                         );
@@ -626,6 +667,7 @@ class NavigationViewState extends State<NavigationView> {
                               identifier: 'openModeOpen',
                             ) as bool? ??
                             mounted,
+                        onAnimationEnd: _animationEndCallback,
                       ),
                     ),
                     Expanded(child: content),
@@ -673,6 +715,10 @@ class NavigationViewState extends State<NavigationView> {
                   start: minimalPaneOpen ? 0.0 : -openSize,
                   width: openSize,
                   height: MediaQuery.sizeOf(context).height,
+                  onEnd: () {
+                    _isTransitioning = false;
+                    if (mounted) setState(() {});
+                  },
                   child: PaneScrollConfiguration(
                     child: Mica(
                       backgroundColor: theme.overlayBackgroundColor,
@@ -715,11 +761,12 @@ class NavigationViewState extends State<NavigationView> {
 
       return Mica(
         backgroundColor: theme.backgroundColor,
-        child: InheritedNavigationView(
+        child: _InheritedNavigationView(
           displayMode: _compactOverlayOpen ? PaneDisplayMode.open : displayMode,
           minimalPaneOpen: minimalPaneOpen,
           pane: widget.pane,
-          oldIndex: _oldIndex,
+          previousItemIndex: _previousItemIndex,
+          isTransitioning: _isTransitioning,
           child: PaneItemKeys(keys: _itemKeys, child: paneResult),
         ),
       );
@@ -737,7 +784,7 @@ class NavigationViewState extends State<NavigationView> {
           child: MediaQuery.removePadding(
             context: context,
             removeTop: widget.appBar != null,
-            child: child,
+            child: RepaintBoundary(child: child),
           ),
         ),
       );
@@ -884,8 +931,9 @@ class _NavigationAppBar extends StatelessWidget {
     assert(debugCheckHasMediaQuery(context));
     assert(debugCheckHasFluentLocalizations(context));
 
-    final displayMode = InheritedNavigationView.maybeOf(context)?.displayMode ??
-        PaneDisplayMode.top;
+    final displayMode =
+        _InheritedNavigationView.maybeOf(context)?.displayMode ??
+            PaneDisplayMode.top;
     final leading = appBar._buildLeading(displayMode != PaneDisplayMode.top);
     final title = () {
       if (appBar.title != null) {
