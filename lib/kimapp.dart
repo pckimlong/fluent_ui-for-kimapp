@@ -110,8 +110,16 @@ extension BuildContextX on BuildContext {
 }
 
 extension FluentThemeDataX on FluentThemeData {
-  Color get disabledColor => resources.accentTextFillColorDisabled;
-  Color get borderInputColor => resources.controlStrokeColorDefault;
+  // Color get disabledColor => resources.accentTextFillColorDisabled;
+  // Color get borderInputColor => resources.controlStrokeColorDefault;
+
+  bool get isDarkMode => brightness == Brightness.dark;
+
+  Color get disabledColor => isDarkMode ? const Color(0x5dffffff) : const Color(0x5c000000);
+
+  Color get borderInputColor => !isDarkMode
+      ? const Color.fromRGBO(0, 0, 0, 0.4458)
+      : const Color.fromRGBO(255, 255, 255, 0.5442);
 }
 
 // custom widget
