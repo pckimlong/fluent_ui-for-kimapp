@@ -713,7 +713,7 @@ class __PaneItemExpanderState extends State<_PaneItemExpander> with SingleTicker
       identifier: 'paneItemExpanderOpen$index',
     );
     if (_open) {
-      if (useFlyout && doFlyout) {
+      if (useFlyout && doFlyout && flyoutController.isAttached) {
         final body = _InheritedNavigationView.of(context);
         final displayMode = body.displayMode;
         final navigationTheme = NavigationPaneTheme.of(context);

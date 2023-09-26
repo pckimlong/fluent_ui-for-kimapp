@@ -1,3 +1,18 @@
+## 4.7.5
+
+* fix: do not enforce a tree view item on `TreeView` ([#934](https://github.com/bdlukaa/fluent_ui/issues/934))
+
+## 4.7.4
+
+* fix: tap on `DatePicker` day does not skip a day ([#914](https://github.com/bdlukaa/fluent_ui/issues/914))
+* fix: ensure `PaneItemExpander`'s flyout is attached before using it ([#857](https://github.com/bdlukaa/fluent_ui/issues/857))
+* fix: expose more `TextField` properties on `NumberBox` ([#933](https://github.com/bdlukaa/fluent_ui/discussions/933))
+* fix: expose more `TextField` properties on `PasswordBox` ([#925](https://github.com/bdlukaa/fluent_ui/issues/925))
+* fix: `AutoSuggestBox.onOverlayVisibilityChanged` now results in the correct state ([#926](https://github.com/bdlukaa/fluent_ui/issues/926))
+* fix: `MenuFlyoutSubItem` inherits the acrylic data from `MenuFlyout` ([#932](https://github.com/bdlukaa/fluent_ui/issues/932))
+* fix: `MenuFlyoutSubItem` inhertis its `MenuFlyout` parent decoration data ([#931](https://github.com/bdlukaa/fluent_ui/issues/931)) 
+* feat: Expose `paneNavigationButtonIcon` on `NavigationPaneThemeData` ([#929](https://github.com/bdlukaa/fluent_ui/issues/929))
+
 ## 4.7.3
 
 * feat: Expose `AutoSuggestBoxState` ([#912](https://github.com/bdlukaa/fluent_ui/issues/912))

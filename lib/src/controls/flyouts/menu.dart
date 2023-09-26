@@ -103,6 +103,7 @@ class _MenuFlyoutState extends State<MenuFlyout> {
       shadowColor: widget.shadowColor,
       shape: widget.shape,
       padding: EdgeInsets.zero,
+      useAcrylic: DisableAcrylic.of(context) != null,
       child: ScrollConfiguration(
         behavior: const _MenuScrollBehavior(),
         child: SingleChildScrollView(
@@ -114,7 +115,9 @@ class _MenuFlyoutState extends State<MenuFlyout> {
               final item = widget.items[index];
               if (item is MenuFlyoutItem) item._useIconPlaceholder = hasLeading;
               if (item is MenuFlyoutSubItem && keys.isNotEmpty) {
-                item._key = keys[index] as GlobalKey<_MenuFlyoutSubItemState>?;
+                item
+                  .._key = keys[index] as GlobalKey<_MenuFlyoutSubItemState>?
+                  ..disableAcyrlic = DisableAcrylic.of(context) != null;
               }
               return KeyedSubtree(
                 key: item.key,
@@ -357,6 +360,8 @@ class MenuFlyoutSubItem extends MenuFlyoutItem {
   /// Only applied if [showBehavior] is [SubItemShowBehavior.hover]
   final Duration showHoverDelay;
 
+  bool disableAcyrlic = false;
+
   @override
   Widget build(BuildContext context) {
     return _MenuFlyoutSubItem(key: _key, item: this, items: items);
@@ -446,6 +451,8 @@ class _MenuFlyoutSubItemState extends State<_MenuFlyoutSubItem>
   void show(MenuInfoProviderState menuInfo) {
     final parent = Flyout.of(context);
 
+    final menuFlyout = context.findAncestorWidgetOfExactType<MenuFlyout>();
+
     final itemBox = context.findRenderObject() as RenderBox;
     final itemRect = itemBox.localToGlobal(
           Offset.zero,
@@ -468,13 +475,25 @@ class _MenuFlyoutSubItemState extends State<_MenuFlyoutSubItem>
           transitionDuration: parent.transitionDuration,
           root: parent.widget.root,
           builder: (context) {
-            return FadeTransition(
+            Widget w = FadeTransition(
               opacity: transitionController,
               child: MenuFlyout(
                 key: menuKey,
+                color: menuFlyout?.color,
+                constraints: menuFlyout?.constraints,
+                elevation: menuFlyout?.elevation ?? 8.0,
+                padding: menuFlyout?.padding,
+                shadowColor: menuFlyout?.shadowColor ?? Colors.black,
+                shape: menuFlyout?.shape,
                 items: widget.items(context),
               ),
             );
+
+            if (widget.item.disableAcyrlic) {
+              w = DisableAcrylic(child: w);
+            }
+
+            return w;
           },
         ),
       ),
