@@ -80,8 +80,7 @@ class TabView extends StatefulWidget {
   /// Whether another tab was requested to be displayed
   final ValueChanged<int>? onChanged;
 
-  /// The tabs to be displayed. This must have the same
-  /// length of [bodies]
+  /// The tabs to be displayed.
   final List<Tab> tabs;
 
   /// Called when the new button is pressed or when the
@@ -95,10 +94,10 @@ class TabView extends StatefulWidget {
 
   /// Whether the following shortcuts are enabled:
   ///
-  /// - Ctrl + T to create a new tab
-  /// - Ctrl + F4 or Ctrl + W to close the current tab
-  /// - `Ctrl+1` to `Ctrl+8` to navigate through tabs
-  /// - `Ctrl+9` to navigate to the last tab
+  ///   * `Ctrl + T` to create a new tab
+  ///   * `Ctrl + F4` or `Ctrl + W` to close the current tab
+  ///   * `Ctrl + 1` to ` Ctrl + 8` to navigate through tabs
+  ///   * `Ctrl + 9` to navigate to the last tab
   final bool shortcutsEnabled;
 
   /// Called when the tabs are reordered. If null,
@@ -198,7 +197,13 @@ class TabView extends StatefulWidget {
         'tabWidthBehavior',
         tabWidthBehavior,
         defaultValue: TabWidthBehavior.equal,
-      ));
+      ))
+      ..add(DiagnosticsProperty<Duration>(
+        'closeDelayDuration',
+        closeDelayDuration,
+      ))
+      ..add(DoubleProperty('minTabWidth', minTabWidth, defaultValue: 80.0))
+      ..add(DoubleProperty('maxTabWidth', maxTabWidth, defaultValue: 240.0));
   }
 }
 
@@ -354,10 +359,10 @@ class _TabViewState extends State<TabView> {
         onPressed: onPressed,
         style: ButtonStyle(
           foregroundColor: ButtonState.resolveWith((states) {
-            if (states.isDisabled || states.isNone) {
+            if (states.isDisabled) {
               return FluentTheme.of(context)
                   .resources
-                  .controlAltFillColorDisabled;
+                  .accentTextFillColorDisabled;
             } else {
               return FluentTheme.of(context).inactiveColor;
             }
@@ -498,7 +503,7 @@ class _TabViewState extends State<TabView> {
                     child: _buttonTabBuilder(
                       context,
                       const Icon(FluentIcons.caret_left_solid8, size: 8),
-                      !scrollController.canBackward
+                      scrollController.canBackward
                           ? () {
                               if (direction == TextDirection.ltr) {
                                 scrollController.backward(align: false);
@@ -522,7 +527,7 @@ class _TabViewState extends State<TabView> {
                     child: _buttonTabBuilder(
                       context,
                       const Icon(FluentIcons.caret_right_solid8, size: 8),
-                      !scrollController.canForward
+                      scrollController.canForward
                           ? () {
                               if (direction == TextDirection.ltr) {
                                 scrollController.forward(align: false);

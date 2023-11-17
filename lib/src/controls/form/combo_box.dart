@@ -136,9 +136,9 @@ class _ComboBoxItemButtonState<T> extends State<_ComboBoxItemButton<T>> {
     }
   }
 
-  void _handleOnTap() {
-    final comboboxMenuItem = widget.route.items[widget.itemIndex];
+  ComboBoxItem<T> get comboboxMenuItem => widget.route.items[widget.itemIndex];
 
+  void _handleOnTap() {
     if (comboboxMenuItem.onTap != null) {
       comboboxMenuItem.onTap!();
     }
@@ -196,7 +196,7 @@ class _ComboBoxItemButtonState<T> extends State<_ComboBoxItemButton<T>> {
           ]),
         );
       },
-      onPressed: _handleOnTap,
+      onPressed: comboboxMenuItem.enabled ? _handleOnTap : null,
       onFocusChange: _handleFocusChange,
     );
     if (kIsWeb) {
@@ -735,11 +735,28 @@ class _ComboBoxItemContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = FluentTheme.of(context);
     final hasPadding = _ContainerWithoutPadding.of(context) == null;
+    final state = HoverButton.maybeOf(context)?.states ?? <ButtonStates>{};
+
+    final foregroundColor = state.isDisabled
+        ? theme.resources.textFillColorDisabled
+        : state.isPressing
+            ? theme.resources.textFillColorTertiary
+            : state.isHovering
+                ? theme.resources.textFillColorSecondary
+                : theme.resources.textFillColorPrimary;
+
     return Container(
       height: hasPadding ? kComboBoxItemHeight : kComboBoxItemHeight - _kMenuItemBottomPadding,
       alignment: AlignmentDirectional.centerStart,
-      child: child,
+      child: DefaultTextStyle.merge(
+        style: TextStyle(color: foregroundColor),
+        child: IconTheme.merge(
+          data: IconThemeData(color: foregroundColor),
+          child: child,
+        ),
+      ),
     );
   }
 }
@@ -769,6 +786,7 @@ class ComboBoxItem<T> extends _ComboBoxItemContainer {
     super.key,
     this.onTap,
     this.value,
+    this.enabled = true,
     required super.child,
   });
 
@@ -779,6 +797,9 @@ class ComboBoxItem<T> extends _ComboBoxItemContainer {
   ///
   /// Eventually returned in a call to [ComboBox.onChanged].
   final T? value;
+
+  /// Whether this item is enabled.
+  final bool enabled;
 }
 
 /// A fluent design button for selecting from a list of items.

@@ -1,3 +1,44 @@
+## [next]
+
+* Correctly paint buttons borders ([#956](https://github.com/bdlukaa/fluent_ui/pull/956))
+* **MINOR BREAKING** Removed `ButtonStyle.border`. Use `ButtonStyle.shape` instead:
+  Before:
+  ```dart
+  Button(
+    style: ButtonStyle(
+      border: ButtonState.all(BorderSide(...)),
+    ),
+  ),
+  ```
+
+  Now:
+  ```dart
+  Button(
+    style: ButtonStyle(
+      shape: ButtonState.all(RoundedRectangleBorder(...)),
+    ),
+  ),
+  ```
+* **BREAKING** Removed `Chip` and its related widgets.
+* **BREAKING** Removed `PillButtonBar` and its related widgets. Use `CommandBar` instead.
+* **BREAKING** Removed `SplitButtonBar`. Use `SplitButton` instead.
+* **BREAKING** Removed `BottomSheet` and its related widgets and functions.
+* **BREAKING** Removed `Snackbar`, `showSnackbar` and their related widgets. Use `InfoBar` and `displayInfoBar` instead.
+* fix: do not close `InfoBar` twice ([#955](https://github.com/bdlukaa/fluent_ui/issues/955))
+
+## 4.7.7
+
+* fix: `ProgressRing` and `ProgressBar` now fit correctly the parent bounds ([#942](https://github.com/bdlukaa/fluent_ui/issues/942))
+* fix: `TabView` buttons was only rendered on hover. Now the buttons (add and scroll buttons) are always rendered.
+* fix: `ComboboxItem` correctly apply foreground color. Added `ComboboxItem.enabled` ([#949](https://github.com/bdlukaa/fluent_ui/issues/949))
+* Add a support for Cupertino Loclizations from GlobalCupertinoLocalizations, this can help fix some errors when using offical adaptive widgets and other cupertino widgets
+* Upgrade the `scroll_pos` dependecy to the latest version which is 0.5.0
+
+## 4.7.6
+
+* fix: items not aligned centered in `ListTile`. Added `ListTile.contentAlignment` and `ListTile.contentPadding` ([#939](https://github.com/bdlukaa/fluent_ui/issues/939))
+* fix: `TreeViewItem` no longer enforces a max height ([#937](https://github.com/bdlukaa/fluent_ui/issues/937))
+
 ## 4.7.5
 
 * fix: do not enforce a tree view item on `TreeView` ([#934](https://github.com/bdlukaa/fluent_ui/issues/934))

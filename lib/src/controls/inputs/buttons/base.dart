@@ -82,6 +82,7 @@ abstract class BaseButton extends StatefulWidget {
   /// Usually a [Text] widget
   final Widget child;
 
+  /// Whether this button can be focused.
   final bool focusable;
 
   @protected
@@ -149,12 +150,14 @@ class _BaseButtonState extends State<BaseButton> {
             resolve<Color?>((ButtonStyle? style) => style?.backgroundColor);
         final resolvedForegroundColor =
             resolve<Color?>((ButtonStyle? style) => style?.foregroundColor);
-        final resolvedShadowColor = resolve<Color?>((ButtonStyle? style) => style?.shadowColor);
-        final resolvedPadding =
-            resolve<EdgeInsetsGeometry?>((ButtonStyle? style) => style?.padding) ?? EdgeInsets.zero;
-        final resolvedBorder = resolve<BorderSide?>((ButtonStyle? style) => style?.border);
-        final resolvedShape = resolve<OutlinedBorder?>((ButtonStyle? style) => style?.shape) ??
-            const RoundedRectangleBorder();
+        final resolvedShadowColor =
+            resolve<Color?>((ButtonStyle? style) => style?.shadowColor);
+        final resolvedPadding = resolve<EdgeInsetsGeometry?>(
+                (ButtonStyle? style) => style?.padding) ??
+            EdgeInsets.zero;
+        final resolvedShape =
+            resolve<ShapeBorder?>((ButtonStyle? style) => style?.shape) ??
+                const RoundedRectangleBorder();
 
         final padding = resolvedPadding
             .add(
@@ -180,7 +183,7 @@ class _BaseButtonState extends State<BaseButton> {
             height: theme.extension<KimappStyle>()!.baseComponentHeight * 0.96,
             alignment: Alignment.center,
             decoration: ShapeDecoration(
-              shape: resolvedShape.copyWith(side: resolvedBorder),
+              shape: resolvedShape,
               color: resolvedBackgroundColor,
             ),
             padding: padding,
