@@ -1,6 +1,43 @@
-## [next]
+## 4.8.6
 
-* Correctly paint buttons borders ([#956](https://github.com/bdlukaa/fluent_ui/pull/956))
+* fix: Pop the menu flyout before than calling the close callback ([#1009](https://github.com/bdlukaa/fluent_ui/issues/1009))
+* fix: `Button.child` is now vertically centered ([#1011](https://github.com/bdlukaa/fluent_ui/issues/1011))
+* fix: Adjust `Button`'s foreground color when hovered and pressed ([#1012](https://github.com/bdlukaa/fluent_ui/issues/1012))
+* feat: Added `.textController` and `.onTextChanged` to `EditableComboBox`. ([#1017](https://github.com/bdlukaa/fluent_ui/issues/1017))
+* fix: Do not show the selected indicator on the combo box popup if the current value is not present in the items list.
+
+## 4.8.5
+
+* **MINOR BREAKING** Renamed `NavigationPaneThemeData.standard` to `NavigationPaneThemeData.fromResources`, and removed the `backgroundColor` and `inactiveColor` properties ([#1008](https://github.com/bdlukaa/fluent_ui/issues/1008))
+* fix: Adjust `Slider` animation ([#1006](https://github.com/bdlukaa/fluent_ui/issues/1006))
+
+## 4.8.4
+
+* feat: Added Croatian localization support ([#1004](https://github.com/bdlukaa/fluent_ui/pull/1004))
+* feat: Added Vietnamese localization support ([#1005](https://github.com/bdlukaa/fluent_ui/pull/1005))
+
+## 4.8.3
+
+* fix: Offer a more clear exception info in `PaneItemExpander` ([#990](https://github.com/bdlukaa/fluent_ui/pull/990))
+* fix: `ScaffoldPage.padding` is correctly applied ([#986](https://github.com/bdlukaa/fluent_ui/issues/986))
+* fix: `SliderThemeData.labelForegroundColor` is correctly applied ([#1000](https://github.com/bdlukaa/fluent_ui/issues/1000))
+* feat: `NavigationView.onDisplayModeChanged` ([#998](https://github.com/bdlukaa/fluent_ui/issues/998))
+
+## 4.8.2
+
+* fix: The `MenuFlyoutSubItem` in the `DropDownButton` was not displaying when hovered or pressed. ([#964](https://github.com/bdlukaa/fluent_ui/pull/964))
+* fix: Added `enabled` to `PaneItem.copyWith` ([#980](https://github.com/bdlukaa/fluent_ui/issues/980))
+* feat: Added `barrierRecognizer` to `FlyoutController.showFlyout` ([#983](https://github.com/bdlukaa/fluent_ui/issues/983))
+
+## 4.8.1
+
+* feat: Added `NavigationPane.toggleable` ([#973](https://github.com/bdlukaa/fluent_ui/issues/973))
+* feat: `NumberBox.onTextChange` ([#972](https://github.com/bdlukaa/fluent_ui/issues/972))
+* fix: `TextBox.expands` correctly expands on unbounded areas ([#960](https://github.com/bdlukaa/fluent_ui/issues/960))
+
+## 4.8.0
+
+* fix: Correctly paint buttons borders ([#956](https://github.com/bdlukaa/fluent_ui/pull/956))
 * **MINOR BREAKING** Removed `ButtonStyle.border`. Use `ButtonStyle.shape` instead:
   Before:
   ```dart
@@ -25,6 +62,9 @@
 * **BREAKING** Removed `BottomSheet` and its related widgets and functions.
 * **BREAKING** Removed `Snackbar`, `showSnackbar` and their related widgets. Use `InfoBar` and `displayInfoBar` instead.
 * fix: do not close `InfoBar` twice ([#955](https://github.com/bdlukaa/fluent_ui/issues/955))
+* feat: add Kurdish locale ([#962](https://github.com/bdlukaa/fluent_ui/pull/962))
+* fix: review `debugFillProperties` on widgets ([#974](https://github.com/bdlukaa/fluent_ui/issues/974))
+* fix: Date and Time pickers when localization is not English ([#961](https://github.com/bdlukaa/fluent_ui/issues/961))
 
 ## 4.7.7
 

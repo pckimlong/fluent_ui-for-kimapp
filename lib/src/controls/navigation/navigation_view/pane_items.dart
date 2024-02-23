@@ -386,6 +386,7 @@ class PaneItem extends NavigationPaneItem {
     ButtonState<Color?>? tileColor,
     ButtonState<Color?>? selectedTileColor,
     VoidCallback? onTap,
+    bool? enabled,
   }) {
     return PaneItem(
       title: title ?? this.title,
@@ -399,6 +400,7 @@ class PaneItem extends NavigationPaneItem {
       tileColor: tileColor ?? this.tileColor,
       selectedTileColor: selectedTileColor ?? this.selectedTileColor,
       onTap: onTap ?? this.onTap,
+      enabled: enabled ?? this.enabled,
     );
   }
 }
@@ -780,6 +782,9 @@ class __PaneItemExpanderState extends State<_PaneItemExpander> with SingleTicker
     assert(debugCheckHasFluentTheme(context));
     final theme = FluentTheme.of(context);
     final body = _InheritedNavigationView.of(context);
+
+    assert(body.pane!.selected != null,
+        'The selected of NavigationPane can not be null!Try offer a value in NavigationPane!');
 
     _open = PageStorage.of(context).readState(
           context,

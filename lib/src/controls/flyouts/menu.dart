@@ -36,7 +36,7 @@ class MenuFlyout extends StatefulWidget {
   ///    separates items in a [MenuFlyout].
   ///  * [MenuFlyoutSubItem], which represents a menu item that displays a
   ///    sub-menu in a [MenuFlyout]
-  /// {@end-template}
+  /// {@endtemplate}
   final List<MenuFlyoutItemBase> items;
 
   /// The background color of the box.
@@ -240,11 +240,23 @@ class MenuFlyoutItem extends MenuFlyoutItemBase {
   ///
   /// ![](https://learn.microsoft.com/en-us/windows/apps/design/controls/images/contextmenu_rs2_icons.png)
   ///
-  /// Usually an [Icon] widget,
+  /// Usually an [Icon] widget.
   final Widget? leading;
+
+  /// The text displayed in this item.
+  ///
+  /// Usually a [Text] widget.
   final Widget text;
+
+  /// Displayed after [text].
+  ///
+  /// Usually an [Icon] widget.
   final Widget? trailing;
+
+  /// Called when the item is pressed.
   final VoidCallback? onPressed;
+
+  /// Whether this item is selected or not.
   final bool selected;
 
   bool _useIconPlaceholder = false;
@@ -268,7 +280,10 @@ class MenuFlyoutItem extends MenuFlyoutItemBase {
           data: const IconThemeData(size: 12.0),
           child: trailing ?? const SizedBox.shrink(),
         ),
-        onPressed: onPressed,
+        onPressed: () {
+          Navigator.of(context).maybePop();
+          onPressed?.call();
+        },
       ),
     );
   }

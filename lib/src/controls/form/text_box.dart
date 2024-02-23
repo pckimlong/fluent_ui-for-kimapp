@@ -1191,10 +1191,7 @@ class _TextBoxState extends State<TextBox>
                     child: _selectionGestureDetectorBuilder.buildGestureDetector(
                       behavior: HitTestBehavior.translucent,
                       child: Align(
-                        alignment: const Alignment(-1.0, -0.3),
-                        // alignment: Alignment(-1.0, _textAlignVertical.y),
-                        widthFactor: 1.0,
-                        heightFactor: 1.0,
+                        alignment: Alignment(-1.0, _textAlignVertical.y),
                         child: SmallIconButton(
                           child: _addTextDependentAttachments(
                             paddedEditable,
