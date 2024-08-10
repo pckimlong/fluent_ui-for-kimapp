@@ -149,7 +149,12 @@ class _BaseButtonState extends State<BaseButton> {
       onTapDown: widget.onTapDown,
       onTapUp: widget.onTapUp,
       builder: (context, states) {
+<<<<<<< HEAD
         T? resolve<T>(ButtonState<T>? Function(ButtonStyle? style) getProperty) {
+=======
+        T? resolve<T>(
+            WidgetStateProperty<T>? Function(ButtonStyle? style) getProperty) {
+>>>>>>> upstream/master
           return effectiveValue(
             (ButtonStyle? style) => getProperty(style)?.resolve(states),
           );

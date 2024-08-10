@@ -431,10 +431,11 @@ class InfoBarThemeData with Diagnosticable {
             return theme.resources.systemFillColorCritical;
         }
       },
-      actionStyle: ButtonStyle(
-        padding: ButtonState.all(const EdgeInsets.all(6)),
+      actionStyle: const ButtonStyle(
+        padding: WidgetStatePropertyAll(EdgeInsets.all(6)),
       ),
-      closeButtonStyle: ButtonStyle(iconSize: ButtonState.all(16.0)),
+      closeButtonStyle:
+          const ButtonStyle(iconSize: WidgetStatePropertyAll(16.0)),
     );
   }
 

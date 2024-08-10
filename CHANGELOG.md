@@ -1,12 +1,104 @@
-## NEXT
+## 4.9.1
+
+- feat: ¹ `NumberBox` now supports precision greater than 4. ² Add `NumberBox.pattern`, `NumberBox.formatter`, `NumberBox.format` ([#1080](https://github.com/bdlukaa/fluent_ui/pull/1080))
+* fix: Resolved issue where `PaneItem` within `PaneItemExpander` remained accessible in `NavigationPane` compact mode ([#1081](https://github.com/bdlukaa/fluent_ui/issues/1081))
+* fix: Correct number of days on `DatePicker` popup ([#1049](https://github.com/bdlukaa/fluent_ui/issues/1049))
+* feat: Create `PaneItemWidgetAdapter` ([#1087](https://github.com/bdlukaa/fluent_ui/issues/1087))
+* feat: Add `maxWidth` to `TooltipThemeData` for optional wrapping of long tooltips ([#1094](https://github.com/bdlukaa/fluent_ui/issues/1094))
+* fix: Fixed compile errors with Flutter 3.24.0 stable ([#1097](https://github.com/bdlukaa/fluent_ui/pull/1097))
+
+## 4.9.0
+
+* fix: ¹ `DropDownButton.closeAfterClick` is now correctly applied. ² Added `MenuFlyoutItem.closeAfterClick`, which defaults to `true`. ([#1016](https://github.com/bdlukaa/fluent_ui/issues/1016))
+* fix: `MenuFlyoutSubItem` does not close when pressed ([#1037](https://github.com/bdlukaa/fluent_ui/issues/1037))
+* fix: Make `ScaffoldPage` opaque ([#1048](https://github.com/bdlukaa/fluent_ui/issues/1048))
 * fix: Scroll issue in `DatePicker`. ([#1054](https://github.com/bdlukaa/fluent_ui/issues/1054))
 * feat: Add `NumberBox.textInputAction` and `NumberBox.onEditingComplete` ([#1063](https://github.com/bdlukaa/fluent_ui/pull/1063))
+* fix: `NumberBox` does not calls a rebuild when it is already building ([#1064](https://github.com/bdlukaa/fluent_ui/issues/1064))
+* feat: Add `Tab.color`, `Tab.selectedColor` and `Tab.outlineColor` to TabView  ([#1068](https://github.com/bdlukaa/fluent_ui/pull/1068))
+* feat: Added `NavigationView.onItemPressed` callback, called when the item is on tap ([#1067](https://github.com/bdlukaa/fluent_ui/pull/1067))
+* fix: Mark `MenuFlyoutItem` as disabled when `.onPressed` is `null` ([#1074](https://github.com/bdlukaa/fluent_ui/issues/1074))
+* **BREAKING** feat: Removed `ButtonState`, `ButtonStates` and their related classes. Use `WidgetStateProperty`, `WidgetState` instead. ([#1075](https://github.com/bdlukaa/fluent_ui/issues/1075))
+  Before:
+
+  ```dart
+  Button(
+    style: ButtonStyle(
+      shape: ButtonState.all(RoundedRectangleBorder(...)),
+      backgroundColor: ButtonState.resolveWith((states) {
+        if (states.isPressed) {
+          return Colors.blue.shade900;
+        }
+        return Colors.blue;
+      }),
+      foregroundColor: ButtonState.resolveWith((states) {
+        return ButtonState.forStates<Color>(
+          states,
+          disabled: Colors.grey,
+          hovered: Colors.white.withOpacity(0.8),
+          pressed: Colors.white.withOpacity(0.6),
+        );
+      }),
+    ),
+  ),
+  ```
+
+  After:
+
+  ```dart
+  Button(
+    style: ButtonStyle(
+      shape: WidgetStatePropertyAll(RoundedRectangleBorder(...)),
+      backgroundColor: WidgetStateProperty.resolveWith((states) {
+        if (states.isPressed) {
+          return Colors.blue.shade900;
+        }
+        return Colors.blue;
+      }),
+      foregroundColor: WidgetStateProperty.resolveWith((states) {
+        return WidgetStateExtension.forStates<Color>(
+          states,
+          disabled: Colors.grey,
+          hovered: Colors.white.withOpacity(0.8),
+          pressed: Colors.white.withOpacity(0.6),
+        );
+      }),
+    ),
+  ),
+  ```
+* fix: Do not dismiss Scrollbar if it is still being pressed ([#1077](https://github.com/bdlukaa/fluent_ui/issues/1077))
+* feat: Make `Tab` a widget that can be overridable ([#1050](https://github.com/bdlukaa/fluent_ui/issues/1050))
+  To create a custom Tab, you can now extend `Tab`:
+
+  ```dart
+  class MyCustomTab extends Tab {
+    MyCustomTab({super.key, required super.text, required super.body});
+
+    @override
+    State<Tab> createState() => MyCustomTabState();
+  }
+
+  class MyCustomTabState extends TabState {
+    @override
+    Widget build(BuildContext context) {
+      super.build(context);
+      return ColoredBox(
+        color: Colors.red,
+        child: super.build(context),
+      );
+    }
+  }
+  ```
+
+  Explore the `TabState` reference to see all the available methods you can override.
+* feat: Deprecate `TabView.addIconData` and `TabView.addIconBuilder`. Use `TabView.newTabIcon` instead.
+* fix: `TabView.closeDelayDuration` default value is now 1 second.
 
 ## 4.8.7
 
 * fix: A child of `Button` has an unbound height constraint. ([#1039](https://github.com/bdlukaa/fluent_ui/issues/1039))
 * feat: Added `DatePicker.fieldFlex` to control the width proportion of each field. ([#1053](https://github.com/bdlukaa/fluent_ui/pull/1053))
-* fix: `Slider` thumb is correct rendered when it's on the edges. ([#1046](https://github.com/bdlukaa/fluent_ui/pull/1046)
+* fix: `Slider` thumb is correct rendered when it's on the edges. ([#1046](https://github.com/bdlukaa/fluent_ui/pull/1046))
 * feat: Added `TabView.addIconBuilder` ([#1047](https://github.com/bdlukaa/fluent_ui/pull/1047))
 
 ## 4.8.6
@@ -102,7 +194,7 @@
 * fix: expose more `TextField` properties on `PasswordBox` ([#925](https://github.com/bdlukaa/fluent_ui/issues/925))
 * fix: `AutoSuggestBox.onOverlayVisibilityChanged` now results in the correct state ([#926](https://github.com/bdlukaa/fluent_ui/issues/926))
 * fix: `MenuFlyoutSubItem` inherits the acrylic data from `MenuFlyout` ([#932](https://github.com/bdlukaa/fluent_ui/issues/932))
-* fix: `MenuFlyoutSubItem` inhertis its `MenuFlyout` parent decoration data ([#931](https://github.com/bdlukaa/fluent_ui/issues/931)) 
+* fix: `MenuFlyoutSubItem` inhertis its `MenuFlyout` parent decoration data ([#931](https://github.com/bdlukaa/fluent_ui/issues/931))
 * feat: Expose `paneNavigationButtonIcon` on `NavigationPaneThemeData` ([#929](https://github.com/bdlukaa/fluent_ui/issues/929))
 
 ## 4.7.3
@@ -154,7 +246,7 @@
 - **BREAKING** Removed `.disabledColor`, `uncheckedColor`, `.checkedColor` and `.borderInputColor` from `FluentThemeData`. Use the values from theme resources instead ([`1295b6`](https://github.com/bdlukaa/fluent_ui/pull/875/commits/a195b58f4440c3c0febc595ba6f0b730a950a0d5))
 - **BREAKING** To match the native implementation, `ToggleSwitch.thumb` and `.thumbBuilder` have been renamed to `.knob` and `.knobBuilder`, respectively. `DefaultToggleSwitchThumb` was renamed to `DefaultToggleSwitchKnob` ([e15e89d](https://github.com/bdlukaa/fluent_ui/pull/875/commits/e15e89d4140635796c105cf79a51f9ebc54cdfe6))
 - Added `CheckboxThemeData.foregroundColor`, `RadioButtonThemeData.foregroundColor` and `ToggleSwitchThemeData.foregroundColor`, which, by default, reacts if the inputs are disabled or not ([#861](https://github.com/bdlukaa/fluent_ui/issues/861))
-- `ToggleSwitch` correctly behaves as disabled when `onChanged` is `null` ([`4b5afb5`](https://github.com/bdlukaa/fluent_ui/pull/875/commits/4b5afb50ece212889917ba89d407fe45151ceff6)) 
+- `ToggleSwitch` correctly behaves as disabled when `onChanged` is `null` ([`4b5afb5`](https://github.com/bdlukaa/fluent_ui/pull/875/commits/4b5afb50ece212889917ba89d407fe45151ceff6))
 - Add `PaneItemExpander.initiallyExpanded` ([#864](https://github.com/bdlukaa/fluent_ui/issues/864))
 - Add `NumberFormBox` ([#862](https://github.com/bdlukaa/fluent_ui/issues/862))
 - `PaneItem.onTap` from `PaneItemExpander.items`, when displayed in popup, are now correctly invoked ([#859](https://github.com/bdlukaa/fluent_ui/issues/859))
@@ -168,7 +260,7 @@
 - Add `TreeView.gesturesBuilder` and `TreeViewItem.gestures` ([#851](https://github.com/bdlukaa/fluent_ui/issues/851))
 - Improved overall `Semantics`. Now, not every input is treated as a button ([2fee45](https://github.com/bdlukaa/fluent_ui/commit/2fee459de612fd562c18ca1924ba835ebb665d7e))
 - Deprecated all mobile widgets: `BottomSheet`, `Snackbar`, `Chip` and `PillButtonBar` - and all their related widgets. ([c1cfe491](https://github.com/bdlukaa/fluent_ui/commit/c1cfe491ba0388af540803c8e4a0bb9a049a873f))
-- **BREAKING** Removed previously deprecated fields ([ee601649](https://github.com/bdlukaa/fluent_ui/commit/ee6016490dc50d217cc2709e4500cc8748fa0e1d)): 
+- **BREAKING** Removed previously deprecated fields ([ee601649](https://github.com/bdlukaa/fluent_ui/commit/ee6016490dc50d217cc2709e4500cc8748fa0e1d)):
   - `EditableComboboxFormField.value`. Use `EditableComboboxFormField.initialValue` instead
   - `DatePicker.startYear`. Use `DatePicker.startDate` instead
   - `DatePicker.endYear`. Use `DatePicker.endDate` instead
@@ -536,7 +628,7 @@
 
 ## 4.0.0
 
-- **BREAKING** Removed `NavigationBody`. Use `PaneItem.body` instead ([#510](https://github.com/bdlukaa/fluent_ui/pull/510)/[#531](https://github.com/bdlukaa/fluent_ui/pull/531)):  
+- **BREAKING** Removed `NavigationBody`. Use `PaneItem.body` instead ([#510](https://github.com/bdlukaa/fluent_ui/pull/510)/[#531](https://github.com/bdlukaa/fluent_ui/pull/531)):
   Before:
 
   ```dart
