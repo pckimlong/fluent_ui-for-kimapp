@@ -142,13 +142,12 @@ class PaneItem extends NavigationPaneItem {
     final isMinimal = mode == PaneDisplayMode.minimal;
     final isCompact = mode == PaneDisplayMode.compact;
 
-    final onItemTapped =
-        (onPressed == null && onTap == null) || !enabled || isTransitioning
-            ? null
-            : () {
-                onPressed?.call();
-                onTap?.call();
-              };
+    final onItemTapped = (onPressed == null && onTap == null) || !enabled || isTransitioning
+        ? null
+        : () {
+            onPressed?.call();
+            onTap?.call();
+          };
 
     final button = HoverButton(
       autofocus: autofocus ?? this.autofocus,
@@ -299,29 +298,16 @@ class PaneItem extends NavigationPaneItem {
             margin: const EdgeInsets.symmetric(horizontal: 6.0),
             decoration: BoxDecoration(
               color: () {
-<<<<<<< HEAD
                 final tileColor =
                     this.tileColor ?? theme.tileColor ?? kDefaultPaneItemColor(context, isTop);
-                final newStates = states.toSet()..remove(ButtonStates.disabled);
-=======
-                final tileColor = this.tileColor ??
-                    theme.tileColor ??
-                    kDefaultPaneItemColor(context, isTop);
                 final newStates = states.toSet()..remove(WidgetState.disabled);
->>>>>>> upstream/master
                 if (selected && selectedTileColor != null) {
                   return selectedTileColor!.resolve(newStates);
                 }
                 return tileColor.resolve(
                   selected
                       ? {
-<<<<<<< HEAD
-                          states.isHovering ? ButtonStates.pressing : ButtonStates.hovering,
-=======
-                          states.isHovered
-                              ? WidgetState.pressed
-                              : WidgetState.hovered,
->>>>>>> upstream/master
+                          states.isHovered ? WidgetState.pressed : WidgetState.hovered,
                         }
                       : newStates,
                 );
@@ -992,8 +978,7 @@ class _PaneItemExpanderMenuItem extends MenuFlyoutItemBase {
   }
 }
 
-base class _PaneItemExpanderItem
-    extends LinkedListEntry<_PaneItemExpanderItem> {
+base class _PaneItemExpanderItem extends LinkedListEntry<_PaneItemExpanderItem> {
   final PaneItem parent;
   final NavigationPaneItem expanderItem;
   final List<NavigationPaneItem> siblings;
