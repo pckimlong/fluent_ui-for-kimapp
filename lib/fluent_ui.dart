@@ -37,7 +37,6 @@ export 'package:scroll_pos/scroll_pos.dart';
 
 // My custom style
 export 'kimapp.dart';
-
 export 'l10n/extension/fluent_localizations_extension.dart';
 export 'l10n/generated/fluent_localizations.dart';
 export 'src/app.dart';
