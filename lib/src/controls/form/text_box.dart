@@ -1129,7 +1129,7 @@ class _TextBoxState extends State<TextBox>
               final resolvedWidgetDecoration = widget.decoration?.resolve(states);
               final radius =
                   resolvedWidgetDecoration?.borderRadius?.resolve(Directionality.of(context)) ??
-                      BorderRadius.circular(4.0);
+                      BorderRadius.circular(kimapp?.borderRadius ?? 4.0);
               final decoration = WidgetStateProperty.resolveWith((states) {
                 return BoxDecoration(
                   borderRadius: radius,
@@ -1194,7 +1194,9 @@ class _TextBoxState extends State<TextBox>
                 borderRadius: radius,
                 clipBehavior: widget.clipBehavior,
                 child: DecoratedBox(
-                  decoration: decoration,
+                  decoration: decoration.copyWith(
+                    borderRadius: radius,
+                  ),
                   child: Container(
                     foregroundDecoration: foregroundDecoration,
                     constraints: kimapp?.baseComponentHeight == null
