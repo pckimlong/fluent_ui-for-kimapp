@@ -1134,7 +1134,8 @@ class _TextBoxState extends State<TextBox>
                 return BoxDecoration(
                   borderRadius: radius,
                   border: Border.all(
-                    color: themeData.resources.controlStrokeColorDefault,
+                    color: kimapp?.borderColor ?? themeData.resources.controlStrokeColorDefault,
+                    width: kimapp?.borderWidth ?? 1,
                   ),
                   color: backgroundColor(states),
                 );
@@ -1160,12 +1161,24 @@ class _TextBoxState extends State<TextBox>
                             themeData.accentColor.defaultBrushFor(
                               themeData.brightness,
                             ),
-                        width: 2,
+                        width: kimapp?.borderWidth ?? 2,
                       ),
                     ),
                   );
                 }
-                return const BoxDecoration();
+                return BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                      color: !enabled
+                          ? Colors.transparent
+                          : widget.unfocusedColor ??
+                              (themeData.brightness.isLight
+                                  ? const Color.fromRGBO(0, 0, 0, 0.45)
+                                  : const Color.fromRGBO(255, 255, 255, 0.54)),
+                      width: kimapp?.borderWidth ?? 1,
+                    ),
+                  ),
+                );
               }).resolve(states).copyWith(
                     backgroundBlendMode: resolvedWidgetForegroundDecoration?.backgroundBlendMode,
                     border: resolvedWidgetForegroundDecoration?.border,
