@@ -107,7 +107,7 @@ class NumberBox<T extends num> extends StatefulWidget {
   /// Default is 2.
   final int? precision;
 
-  /// The parttern for the number box. The pattern is used to format the number
+  /// The pattern for the number box. The pattern is used to format the number
   /// when the user inputs a value.
   ///
   /// If set, [precision], [formatter] and [format] must be `null`.
@@ -294,7 +294,7 @@ class NumberBox<T extends num> extends StatefulWidget {
     this.inputFormatters,
     this.placeholder,
     this.placeholderStyle,
-    this.cursorWidth = 1.5,
+    this.cursorWidth = 2.0,
     this.cursorRadius = const Radius.circular(2.0),
     this.cursorHeight,
     this.cursorColor,
@@ -404,7 +404,8 @@ class NumberBoxState<T extends num> extends State<NumberBox<T>> {
         return _formatter.format(value);
       };
     }
-    controller.text = widget.value?.toString() ?? '';
+
+    if (widget.value != null) _updateController(widget.value!);
   }
 
   @override
@@ -510,14 +511,23 @@ class NumberBoxState<T extends num> extends State<NumberBox<T>> {
     _entry = null;
   }
 
+  final _clearButtonKey = GlobalKey();
+  final _incrementButtonKey = GlobalKey();
+  final _decrementButtonKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     assert(debugCheckHasFluentTheme(context));
     assert(debugCheckHasOverlay(context));
 
     final textFieldSuffix = <Widget>[
+      // Ensure all modes have a suffix. This is necessary to ensure the text
+      // is aligned correctly when there are no suffix actions.
+      // See https://github.com/bdlukaa/fluent_ui/issues/1150
+      const SizedBox(),
       if (widget.clearButton && _hasPrimaryFocus)
         IconButton(
+          key: _clearButtonKey,
           icon: const Icon(FluentIcons.clear),
           onPressed: _clearValue,
         ),
@@ -527,13 +537,16 @@ class NumberBoxState<T extends num> extends State<NumberBox<T>> {
       case SpinButtonPlacementMode.inline:
         textFieldSuffix.addAll([
           IconButton(
+            key: _incrementButtonKey,
             icon: const Icon(FluentIcons.chevron_up),
             onPressed: widget.onChanged != null ? incrementSmall : null,
           ),
           IconButton(
+            key: _decrementButtonKey,
             icon: const Icon(FluentIcons.chevron_down),
             onPressed: widget.onChanged != null ? decrementSmall : null,
           ),
+          const SizedBox(),
         ]);
         break;
       case SpinButtonPlacementMode.compact:
@@ -563,8 +576,13 @@ class NumberBoxState<T extends num> extends State<NumberBox<T>> {
       controller: controller,
       keyboardType: widget.keyboardType,
       enabled: widget.onChanged != null,
-      suffix:
-          textFieldSuffix.isNotEmpty ? Row(children: textFieldSuffix) : null,
+      suffix: textFieldSuffix.isNotEmpty
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: textFieldSuffix,
+            )
+          : null,
       style: widget.style,
       textAlign: widget.textAlign ?? TextAlign.start,
       keyboardAppearance: widget.keyboardAppearance,
