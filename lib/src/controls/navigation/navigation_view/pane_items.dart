@@ -527,6 +527,7 @@ class PaneItemAction extends PaneItem {
     super.selectedTileColor,
     super.tileColor,
     super.trailing,
+    super.enabled = true,
   });
 
   @override

@@ -38,6 +38,7 @@ import 'fluent_localizations_sk.dart';
 import 'fluent_localizations_sv.dart';
 import 'fluent_localizations_ta.dart';
 import 'fluent_localizations_th.dart';
+import 'fluent_localizations_tl.dart';
 import 'fluent_localizations_tr.dart';
 import 'fluent_localizations_uk.dart';
 import 'fluent_localizations_ur.dart';
@@ -164,13 +165,14 @@ abstract class FluentLocalizations {
     Locale('sv'),
     Locale('ta'),
     Locale('th'),
+    Locale('tl'),
     Locale('tr'),
     Locale('uk'),
     Locale('ur'),
     Locale('uz'),
     Locale('vi'),
     Locale('zh'),
-    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant')
+    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
   ];
 
   /// The tooltip for the back button on [NavigationAppBar].
@@ -1285,7 +1287,8 @@ class _FluentLocalizationsDelegate
   @override
   Future<FluentLocalizations> load(Locale locale) {
     return SynchronousFuture<FluentLocalizations>(
-        lookupFluentLocalizations(locale));
+      lookupFluentLocalizations(locale),
+    );
   }
 
   @override
@@ -1308,7 +1311,6 @@ class _FluentLocalizationsDelegate
         'id',
         'it',
         'ja',
-        'km',
         'ko',
         'ku',
         'ms',
@@ -1323,12 +1325,13 @@ class _FluentLocalizationsDelegate
         'sv',
         'ta',
         'th',
+        'tl',
         'tr',
         'uk',
         'ur',
         'uz',
         'vi',
-        'zh'
+        'zh',
       ].contains(locale.languageCode);
 
   @override
@@ -1416,6 +1419,8 @@ FluentLocalizations lookupFluentLocalizations(Locale locale) {
       return FluentLocalizationsTa();
     case 'th':
       return FluentLocalizationsTh();
+    case 'tl':
+      return FluentLocalizationsTl();
     case 'tr':
       return FluentLocalizationsTr();
     case 'uk':
@@ -1431,8 +1436,9 @@ FluentLocalizations lookupFluentLocalizations(Locale locale) {
   }
 
   throw FlutterError(
-      'FluentLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
-      'an issue with the localizations generation tool. Please file an issue '
-      'on GitHub with a reproducible sample app and the gen-l10n configuration '
-      'that was used.');
+    'FluentLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
+    'an issue with the localizations generation tool. Please file an issue '
+    'on GitHub with a reproducible sample app and the gen-l10n configuration '
+    'that was used.',
+  );
 }
